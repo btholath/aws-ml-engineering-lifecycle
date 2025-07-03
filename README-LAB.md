@@ -84,3 +84,18 @@ dtype: int64
 2025-07-03 17:05:33,952 [INFO] 2. Open Data Wrangler → 'Import Flow'.
 2025-07-03 17:05:33,952 [INFO] 3. Select: s3://btholath-sagemaker-datawrangler-demo/data-wrangler/flows/customer_sales_cleaning.flow
 (.venv) @btholath ➜ /workspaces/aws-ml-engineering-lifecycle (main) $ 
+
+
+(.venv) @btholath ➜ /workspaces/aws-ml-engineering-lifecycle (main) $ python 01_data_preparation/ingest/2_upload_dataset.py
+✅ Uploaded /workspaces/aws-ml-engineering-lifecycle/dataset/cleaned_sample_sales_dataset.csv to s3://btholath-sagemaker-datawrangler-demo/data/cleaned_sample_sales_dataset.csv
+
+
+(.venv) @btholath ➜ /workspaces/aws-ml-engineering-lifecycle (main) $ python 01_data_preparation/ingest/3_setup_data_wrangler_flow.py
+
+🚀 ACTION REQUIRED:
+1. Open SageMaker Studio in your AWS Console.
+2. Launch a new Data Wrangler Flow.
+3. Import data from S3 URI: s3://btholath-sagemaker-datawrangler-demo/data/cleaned_sample_sales_dataset.csv
+4. Perform basic transformations, profiling, and export to S3.
+(.venv) @btholath ➜ /workspaces/aws-ml-engineering-lifecycle (main) $ 
+

@@ -1,17 +1,44 @@
-# Script: 2_upload_dataset.py
-# Purpose: Upload dataset to S3
+# File: 01_data_preparation/ingest/2_upload_dataset.py
 
 import boto3
+import os
+import logging
+from dotenv import load_dotenv
+from botocore.exceptions import NoCredentialsError, ClientError
 
-bucket_name = 'btholath-sagemaker-datawrangler-demo'
-s3_key = 'data/cleaned_sample_sales_dataset.csv'
-local_file = 'datasets/cleaned_sample_sales_dataset.csv'
+# Load environment variables
+load_dotenv()
 
-s3 = boto3.client('s3')
+# Setup logging
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(message)s"
+)
 
-def upload_dataset():
-    s3.upload_file(local_file, bucket_name, s3_key)
-    print(f"✅ Uploaded {local_file} to s3://{bucket_name}/{s3_key}")
+# Configuration from .env
+bucket_name = os.getenv("S3_BUCKET")
+raw_file = os.getenv("RAW_CSV_PATH")
+clean_file = os.getenv("CLEAN_CSV_PATH")
+s3_raw_key = os.getenv("S3_RAW_KEY")
+s3_clean_key = os.getenv("S3_CLEAN_KEY")
+
+s3 = boto3.client("s3")
+
+def upload_file(local_path, s3_key):
+    if not os.path.exists(local_path):
+        logging.error(f"❌ File does not exist: {local_path}")
+        return
+    try:
+        s3.upload_file(local_path, bucket_name, s3_key)
+        logging.info(f"✅ Uploaded {local_path} to s3://{bucket_name}/{s3_key}")
+    except NoCredentialsError:
+        logging.error("❌ AWS credentials not found.")
+    except ClientError as e:
+        logging.error(f"❌ Failed to upload: {e}")
 
 if __name__ == "__main__":
-    upload_dataset()
+    logging.info("📤 Uploading raw dataset...")
+    upload_file(raw_file, s3_raw_key)
+
+    logging.info("📤 Uploading cleaned dataset...")
+    upload_file(clean_file, s3_clean_key)
