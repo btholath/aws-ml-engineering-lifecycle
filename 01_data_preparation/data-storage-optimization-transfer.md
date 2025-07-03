@@ -24,3 +24,18 @@
 -   Utilize SageMaker's managed spot training to dynamically allocate Spot Instances.
     -   Adds cost-efficiency and automatic retries via checkpoints.
     -   Can tolerate interruption
+
+
+***Data Transformation***
+-   SageMaker Data Wrangler
+    -   Workflows
+        -   Data selection
+        -   Tranformation
+        -   Storage
+    -   Support for:
+        -   Missing values
+        -   Normalization
+        -   Transformations    
+-   AWS Glue
+    -   Transform and move into S3
+    -   Compatible with SageMaker        
