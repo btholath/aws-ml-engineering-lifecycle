@@ -1,0 +1,62 @@
+{
+    "nodes": [
+        {
+            "node_id": "source_1",
+            "node_type": "SOURCE",
+            "parameters": {
+                "source": "S3",
+                "s3_uri": "s3://btholath-sagemaker-datawrangler-demo/data/cleaned_sample_sales_dataset.csv",
+                "format": "CSV",
+                "delimiter": ",",
+                "compression": "NONE",
+                "header": "true"
+            }
+        },
+        {
+            "node_id": "fill_missing_age",
+            "node_type": "TRANSFORM",
+            "upstream_nodes": [
+                "source_1"
+            ],
+            "parameters": {
+                "transform_type": "IMPUTE",
+                "impute_column": "Age",
+                "impute_strategy": "MEDIAN"
+            }
+        },
+        {
+            "node_id": "encode_gender_country",
+            "node_type": "TRANSFORM",
+            "upstream_nodes": [
+                "fill_missing_age"
+            ],
+            "parameters": {
+                "transform_type": "ENCODE",
+                "columns_to_encode": [
+                    "Gender",
+                    "Country"
+                ],
+                "encoding_strategy": "ONE_HOT"
+            }
+        },
+        {
+            "node_id": "rename_column",
+            "node_type": "TRANSFORM",
+            "upstream_nodes": [
+                "encode_gender_country"
+            ],
+            "parameters": {
+                "transform_type": "RENAME",
+                "rename_map": {
+                    "PurchaseAmount": "Purchase_Value"
+                }
+            }
+        }
+    ],
+    "metadata": {
+        "flow_name": "customer_sales_cleaning",
+        "version": "1.0",
+        "created_by": "automated-script",
+        "description": "Flow for cleaning and transforming customer sales dataset"
+    }
+}
