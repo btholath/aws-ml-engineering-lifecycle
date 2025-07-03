@@ -54,3 +54,10 @@ Export processed data to:
 -   Prevents features with larger scales from dominating
 -   Speeds up convergence of gradient descent algorithms
 -   Reduces risk of numerical instability in computations
+-   Normalization vs. Standadization
+    -   Normalization
+        -   Scales values to a [0,1] range; suitable for bounded features.
+    -   Standarization
+        -   Transforms data to have a mean of 0 and a standard deviation of 1.
+    - Helps in models like k-NN and SVMs where distance-based measures are used.
+        
