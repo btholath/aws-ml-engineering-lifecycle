@@ -41,3 +41,11 @@ Export processed data to:
 -   Ensures consistency in training and production environments.
 
 
+***Feature***
+-   An individual measurable property or characteric of the data that is used as input to a machne learning model.
+-   Types:
+    -   Numerical - e.g., age
+    -   Categorical - e.g., color
+    -   Textual -e.g., words
+    -   Derived Features    - e.g., ratios
+    
