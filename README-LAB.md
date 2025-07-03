@@ -1,3 +1,14 @@
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+unzip awscliv2.zip
+sudo ./aws/install
+aws --version
+sudo apt update
+
+aws configure
+AWS Access Key ID [None]: ....
+AWS Secret Access Key [None]: ....
+Default region name [None]: ....
+Default output format [None]: json
 
 
 (.venv) @btholath ➜ /workspaces/aws-ml-engineering-lifecycle (main) $ python 01_data_preparation/build_dataset/gen_home_sales_dataset.py 
