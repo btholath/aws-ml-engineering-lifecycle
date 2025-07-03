@@ -61,4 +61,9 @@ Export processed data to:
         -   Transforms data to have a mean of 0 and a standard deviation of 1.
     - Helps in models like k-NN and SVMs where distance-based measures are used.
     - Normalization is sensitive to outliers; standarization is more robust.
-    
+-   Use Cases
+    - Improved performance in models like logistic regression and neral networks.
+    - Faster convergence in gradient-based optimizatoion methods
+    - Harmonizing feature contributions.
+    - Example: Scaling features for an XGBoost fradu detection model.
+
