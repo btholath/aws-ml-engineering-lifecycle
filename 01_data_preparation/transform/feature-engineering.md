@@ -27,4 +27,15 @@
 -   Correlation matrices
 -   Distribution histograms
 - Identify inconsitencies or biases in data
-    
+
+
+***Exporting Processed Data***
+Export processed data to:
+    -   Amazon S3 for storage
+    -   Direct input for SageMaker training jobs
+    -   Redshift or other databases for further analysis
+
+***Integration with SageMaker Pipelines***
+-   Data Wrangler integrates seamlessly with SageMaker Pipelines
+-   Allows preprocessing workflows to become part of CI/CD pipelines.
+
