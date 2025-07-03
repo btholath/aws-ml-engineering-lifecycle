@@ -60,4 +60,5 @@ Export processed data to:
     -   Standarization
         -   Transforms data to have a mean of 0 and a standard deviation of 1.
     - Helps in models like k-NN and SVMs where distance-based measures are used.
-        
+    - Normalization is sensitive to outliers; standarization is more robust.
+    
