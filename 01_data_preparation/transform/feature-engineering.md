@@ -48,4 +48,9 @@ Export processed data to:
     -   Categorical - e.g., color
     -   Textual -e.g., words
     -   Derived Features    - e.g., ratios
-    
+
+***Feature Scaling***
+-   Ensures all features contribute equally to model training.
+-   Prevents features with larger scales from dominating
+-   Speeds up convergence of gradient descent algorithms
+-   Reduces risk of numerical instability in computations
