@@ -1,7 +1,7 @@
 # Script: 3_setup_data_wrangler_flow.py
 # Purpose: Guide user to open SageMaker Data Wrangler flow and import S3 data
 
-bucket_name = 'your-existing-or-created-bucket-name'
+bucket_name = 'btholath-sagemaker-datawrangler-demo'
 s3_uri = f"s3://{bucket_name}/data/cleaned_sample_sales_dataset.csv"
 
 def guide_data_wrangler_ingestion():

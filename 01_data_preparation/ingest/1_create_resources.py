@@ -8,7 +8,8 @@ region = 'us-east-1'
 s3 = boto3.client('s3', region_name=region)
 sagemaker = boto3.client('sagemaker', region_name=region)
 
-bucket_name = f"sagemaker-datawrangler-demo-{uuid.uuid4().hex[:6]}"
+#bucket_name = f"sagemaker-datawrangler-demo-{uuid.uuid4().hex[:6]}"
+bucket_name = f"btholath-sagemaker-datawrangler-demo"
 domain_name = "studio-domain-demo"
 
 def create_s3_bucket():

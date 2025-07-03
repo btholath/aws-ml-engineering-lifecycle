@@ -3,7 +3,7 @@
 
 import boto3
 
-bucket_name = 'your-existing-or-created-bucket-name'
+bucket_name = 'btholath-sagemaker-datawrangler-demo'
 s3 = boto3.resource('s3')
 
 def cleanup_bucket():

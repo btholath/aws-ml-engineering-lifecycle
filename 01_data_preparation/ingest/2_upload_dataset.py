@@ -3,7 +3,7 @@
 
 import boto3
 
-bucket_name = 'your-existing-or-created-bucket-name'
+bucket_name = 'btholath-sagemaker-datawrangler-demo'
 s3_key = 'data/cleaned_sample_sales_dataset.csv'
 local_file = 'datasets/cleaned_sample_sales_dataset.csv'
 
