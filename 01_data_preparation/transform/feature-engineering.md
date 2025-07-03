@@ -38,4 +38,6 @@ Export processed data to:
 ***Integration with SageMaker Pipelines***
 -   Data Wrangler integrates seamlessly with SageMaker Pipelines
 -   Allows preprocessing workflows to become part of CI/CD pipelines.
+-   Ensures consistency in training and production environments.
+
 
