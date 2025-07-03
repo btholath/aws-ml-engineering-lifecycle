@@ -1,62 +1,52 @@
 {
+    "version": "2021-03-01",
+    "source": {
+        "name": "S3",
+        "parameters": {
+            "s3Uri": "s3://btholath-sagemaker-datawrangler-demo/data/cleaned_sample_sales_dataset.csv",
+            "format": "CSV",
+            "delimiter": ",",
+            "compression": "NONE",
+            "header": true
+        }
+    },
     "nodes": [
         {
-            "node_id": "source_1",
-            "node_type": "SOURCE",
+            "id": "Impute_1",
+            "type": "IMPUTE",
             "parameters": {
-                "source": "S3",
-                "s3_uri": "s3://btholath-sagemaker-datawrangler-demo/data/cleaned_sample_sales_dataset.csv",
-                "format": "CSV",
-                "delimiter": ",",
-                "compression": "NONE",
-                "header": "true"
+                "input": "source",
+                "strategy": "MEDIAN",
+                "column": "Age"
             }
         },
         {
-            "node_id": "fill_missing_age",
-            "node_type": "TRANSFORM",
-            "upstream_nodes": [
-                "source_1"
-            ],
+            "id": "Encode_1",
+            "type": "ONE_HOT_ENCODER",
             "parameters": {
-                "transform_type": "IMPUTE",
-                "impute_column": "Age",
-                "impute_strategy": "MEDIAN"
-            }
-        },
-        {
-            "node_id": "encode_gender_country",
-            "node_type": "TRANSFORM",
-            "upstream_nodes": [
-                "fill_missing_age"
-            ],
-            "parameters": {
-                "transform_type": "ENCODE",
-                "columns_to_encode": [
+                "input": "Impute_1",
+                "columns": [
                     "Gender",
                     "Country"
-                ],
-                "encoding_strategy": "ONE_HOT"
+                ]
             }
         },
         {
-            "node_id": "rename_column",
-            "node_type": "TRANSFORM",
-            "upstream_nodes": [
-                "encode_gender_country"
-            ],
+            "id": "Rename_1",
+            "type": "RENAME",
             "parameters": {
-                "transform_type": "RENAME",
-                "rename_map": {
+                "input": "Encode_1",
+                "mappings": {
                     "PurchaseAmount": "Purchase_Value"
                 }
             }
         }
     ],
+    "output": {
+        "name": "final_output",
+        "input": "Rename_1"
+    },
     "metadata": {
-        "flow_name": "customer_sales_cleaning",
-        "version": "1.0",
-        "created_by": "automated-script",
-        "description": "Flow for cleaning and transforming customer sales dataset"
+        "flowName": "customer_sales_cleaning"
     }
 }

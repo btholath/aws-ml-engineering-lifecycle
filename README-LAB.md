@@ -65,6 +65,16 @@ dtype: int64
 (.venv) @btholath ➜ /workspaces/aws-ml-engineering-lifecycle (main) $ 
 ```
 
+** Upload dataset to S3 **
+```bash
+(.venv) @btholath ➜ /workspaces/aws-ml-engineering-lifecycle/dataset (main) $ aws s3 sync . s3://btholath-sagemaker-datawrangler-demo/data/
+upload: ./sample_loan_approval_dataset.csv to s3://btholath-sagemaker-datawrangler-demo/data/sample_loan_approval_dataset.csv
+upload: ./sample_sales_dataset_dirty.csv to s3://btholath-sagemaker-datawrangler-demo/data/sample_sales_dataset_dirty.csv
+upload: ./sample_loan_approval_dataset_dirty.csv to s3://btholath-sagemaker-datawrangler-demo/data/sample_loan_approval_dataset_dirty.csv
+upload: ./sample_sales_dataset.csv to s3://btholath-sagemaker-datawrangler-demo/data/sample_sales_dataset.csv
+(.venv) @btholath ➜ /workspaces/aws-ml-engineering-lifecycle/dataset (main) $ 
+```
+
 
 ** Ingest **
 ```bash
@@ -83,6 +93,10 @@ dtype: int64
 2025-07-03 17:05:33,952 [INFO] 1. Go to SageMaker Studio.
 2025-07-03 17:05:33,952 [INFO] 2. Open Data Wrangler → 'Import Flow'.
 2025-07-03 17:05:33,952 [INFO] 3. Select: s3://btholath-sagemaker-datawrangler-demo/data-wrangler/flows/customer_sales_cleaning.flow
+(.venv) @btholath ➜ /workspaces/aws-ml-engineering-lifecycle (main) $ 
+
+(.venv) @btholath ➜ /workspaces/aws-ml-engineering-lifecycle (main) $ python 01_data_preparation/data_wrangler/patch_flow_template.py 
+2025-07-03 17:33:57,350 [INFO] ✅ Patched .flow file saved: 01_data_preparation/data_wrangler/customer_sales_cleaning.flow
 (.venv) @btholath ➜ /workspaces/aws-ml-engineering-lifecycle (main) $ 
 
 
