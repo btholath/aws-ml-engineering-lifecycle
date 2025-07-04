@@ -229,4 +229,50 @@ You should be seeing the training job in aws console at https://us-east-1.consol
 ```
 
 
+@btholath ➜ /workspaces/aws-ml-engineering-lifecycle (main) $ head -n 3 dataset/sample_loan_fixed_for_xgboost.csv
+1,37,51887.99,0,0,0,0,1,0
+0,21,148757.07,0,1,0,1,0,0
+0,80,149022.46,0,1,0,0,0,0
+@btholath ➜ /workspaces/aws-ml-engineering-lifecycle (main) $ python 01_data_preparation/transform/validate_dataset.py 
+Sample rows:
+   0   1          2  3  4  5  6  7  8
+0  1  37   51887.99  0  0  0  0  1  0
+1  0  21  148757.07  0  1  0  1  0  0
+2  0  80  149022.46  0  1  0  0  0  0
+3  0  42  131774.59  1  0  0  0  0  0
+4  0  70  117448.88  0  1  0  1  0  0
+
+Data types:
+0      int64
+1      int64
+2    float64
+3      int64
+4      int64
+5      int64
+6      int64
+7      int64
+8      int64
+dtype: object
+
+Null values?
+0    0
+1    0
+2    0
+3    0
+4    0
+5    0
+6    0
+7    0
+8    0
+dtype: int64
+
+Value counts in label (first) column:
+0
+1    2997
+0    2003
+Name: count, dtype: int64
+
+✅ All columns are numeric.
+@btholath ➜ /workspaces/aws-ml-engineering-lifecycle (main) $ 
+
 

@@ -62,18 +62,21 @@ training_params = {
         "eval_metric": "rmse",
     },
     "InputDataConfig": [
-        {
-            "ChannelName": "train",
-            "DataSource": {
-                "S3DataSource": {
-                    "S3DataType": "S3Prefix",
-                    "S3Uri": training_data_s3_uri,
-                    "S3DataDistributionType": "FullyReplicated",
-                }
-            },
-            "ContentType": "text/csv; label_column=3",  # adjust label_column as needed
-        }
-    ],
+    {
+        "ChannelName": "train",
+        "DataSource": {
+            "S3DataSource": {
+                "S3DataType": "S3Prefix",  # ✅ still correct for CSV
+                "S3Uri": "s3://btholath-sagemaker-datawrangler-demo/data/sample_loan_fixed_for_xgboost.csv",
+                "S3DataDistributionType": "FullyReplicated"
+            }
+        },
+        "ContentType": "text/csv",
+        "CompressionType": "None"
+    }
+]
+
+,
     "OutputDataConfig": {"S3OutputPath": output_s3_uri},
     "ResourceConfig": {
         "InstanceType": "ml.m5.large",
