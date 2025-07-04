@@ -130,5 +130,14 @@ LoanApproved: bool
 -- schema metadata --
 pandas: '{"index_columns": [{"kind": "range", "name": null, "start": 0, "' + 957
 (.venv) @btholath ➜ /workspaces/aws-ml-engineering-lifecycle (main) $ 
+
+(.venv) @btholath ➜ /workspaces/aws-ml-engineering-lifecycle/dataset (main) $ aws s3 sync . s3://btholath-sagemaker-datawrangler-demo/data/
+upload: ./sample_realistic_loan_approval_dataset.parquet to s3://btholath-sagemaker-datawrangler-demo/data/sample_realistic_loan_approval_dataset.parquet
+upload: ./sample_loan_approval_dataset.csv to s3://btholath-sagemaker-datawrangler-demo/data/sample_loan_approval_dataset.csv
+upload: ./sample_sales_dataset.csv to s3://btholath-sagemaker-datawrangler-demo/data/sample_sales_dataset.csv
+upload: ./sample_loan_approval_dataset_dirty.csv to s3://btholath-sagemaker-datawrangler-demo/data/sample_loan_approval_dataset_dirty.csv
+upload: ./sample_sales_dataset_dirty.csv to s3://btholath-sagemaker-datawrangler-demo/data/sample_sales_dataset_dirty.csv
+upload: ./sample_realistic_loan_approval_dataset.csv to s3://btholath-sagemaker-datawrangler-demo/data/sample_realistic_loan_approval_dataset.csv
+upload: ./cleaned_sample_sales_dataset.csv to s3://btholath-sagemaker-datawrangler-demo/data/cleaned_sample_sales_dataset.csv
 ```
 
