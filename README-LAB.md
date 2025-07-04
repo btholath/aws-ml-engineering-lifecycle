@@ -166,21 +166,67 @@ Uploads the file to S3
 
 
 ***Run the training job***
-- /workspaces/aws-ml-engineering-lifecycle/02_model_training/train_xgboost_loan_predictor.py
+```bash
+@btholath ➜ /workspaces/aws-ml-engineering-lifecycle (main) $ python 01_data_preparation/transform/troubleshoot_dataset.py 
+
+🧪 Column Data Types:
+0      int64
+1      int64
+2    float64
+3       bool
+4       bool
+5       bool
+6       bool
+7       bool
+8       bool
+dtype: object
+
+🔍 Non-numeric values:
+/workspaces/aws-ml-engineering-lifecycle/01_data_preparation/transform/troubleshoot_dataset.py:9: FutureWarning: DataFrame.applymap has been deprecated. Use DataFrame.map instead.
+  non_numeric = df.applymap(lambda x: isinstance(x, str) or pd.isnull(x)).any()
+0    False
+1    False
+2    False
+3    False
+4    False
+5    False
+6    False
+7    False
+8    False
+dtype: bool
+
+🚨 First few rows:
+   0   1          2      3      4      5      6      7      8
+0  1  37   51887.99  False  False  False  False   True  False
+1  0  21  148757.07  False   True  False   True  False  False
+2  0  80  149022.46  False   True  False  False  False  False
+3  0  42  131774.59   True  False  False  False  False  False
+4  0  70  117448.88  False   True  False   True  False  False
+```
+
+```bash
+@btholath ➜ /workspaces/aws-ml-engineering-lifecycle (main) $ python 01_data_preparation/transform/fix_booleans_and_upload.py 
+2025-07-04 23:06:12,845 [INFO] ✅ Fixed and saved: ./dataset/sample_loan_fixed_for_xgboost.csv
+2025-07-04 23:06:12,856 [INFO] Found credentials in shared credentials file: ~/.aws/credentials
+2025-07-04 23:06:13,450 [INFO] 📤 Uploaded to: s3://btholath-sagemaker-datawrangler-demo/data/sample_loan_fixed_for_xgboost.csv
+```
 
 ```bash
 @btholath ➜ /workspaces/aws-ml-engineering-lifecycle (main) $ python 02_model_training/train_xgboost_loan_predictor.py
 sagemaker.config INFO - Not applying SDK defaults from location: /etc/xdg/sagemaker/config.yaml
 sagemaker.config INFO - Not applying SDK defaults from location: /home/codespace/.config/sagemaker/config.yaml
-2025-07-04 22:54:31,807 [INFO] Found credentials in shared credentials file: ~/.aws/credentials
-2025-07-04 22:54:31,914 [INFO] Ignoring unnecessary instance type: None.
-2025-07-04 22:54:31,914 [INFO] Using XGBoost image URI: 683313688378.dkr.ecr.us-east-1.amazonaws.com/sagemaker-xgboost:1.7-1
-2025-07-04 22:54:31,914 [INFO] Starting SageMaker training job...
-2025-07-04 22:54:32,557 [INFO] ✅ Training job created: real-loan-predictor-xgb-1751669671
-2025-07-04 22:54:32,557 [INFO] 📦 Output S3 path: s3://btholath-sagemaker-datawrangler-demo/real-loan-predictor-output/
-2025-07-04 22:54:32,557 [INFO] 🔗 Job ARN: arn:aws:sagemaker:us-east-1:637423309379:training-job/real-loan-predictor-xgb-1751669671
+2025-07-04 23:07:17,639 [INFO] Found credentials in shared credentials file: ~/.aws/credentials
+2025-07-04 23:07:17,749 [INFO] Ignoring unnecessary instance type: None.
+2025-07-04 23:07:17,749 [INFO] Using XGBoost image URI: 683313688378.dkr.ecr.us-east-1.amazonaws.com/sagemaker-xgboost:1.7-1
+2025-07-04 23:07:17,749 [INFO] Starting SageMaker training job...
+2025-07-04 23:07:18,400 [INFO] ✅ Training job created: real-loan-predictor-xgb-1751670437
+2025-07-04 23:07:18,400 [INFO] 📦 Output S3 path: s3://btholath-sagemaker-datawrangler-demo/real-loan-predictor-output/
+2025-07-04 23:07:18,400 [INFO] 🔗 Job ARN: arn:aws:sagemaker:us-east-1:637423309379:training-job/real-loan-predictor-xgb-1751670437
 @btholath ➜ /workspaces/aws-ml-engineering-lifecycle (main) $ 
+```
 
 You should be seeing the training job in aws console at https://us-east-1.console.aws.amazon.com/sagemaker/home?region=us-east-1#/jobs
 ```
+
+
 
