@@ -276,3 +276,34 @@ Name: count, dtype: int64
 @btholath ➜ /workspaces/aws-ml-engineering-lifecycle (main) $ 
 
 
+@btholath ➜ /workspaces/aws-ml-engineering-lifecycle (main) $ python 02_model_training/monitor_training_job.py 
+⏱️ Status: Completed
+✅ Final status: Completed
+@btholath ➜ /workspaces/aws-ml-engineering-lifecycle (main) $ 
+
+
+
+After training succeeds, I can help with:
+✅ Monitoring job and fetching logs
+@btholath ➜ /workspaces/aws-ml-engineering-lifecycle (main) $ python 02_model_training/monitor_training_job.py 
+2025-07-04 23:31:51,868 [INFO] Found credentials in shared credentials file: ~/.aws/credentials
+2025-07-04 23:31:52,296 [INFO] Status: Completed
+2025-07-04 23:31:52,296 [INFO] Final Status: Completed
+
+✅ Deploying to real-time inference endpoint
+@btholath ➜ /workspaces/aws-ml-engineering-lifecycle (main) $ python 03_deployment/deploy_model_endpoint.py 
+✅ Deployment started. Endpoint name: xgb-loan-model-1751672068-endpoint
+@btholath ➜ /workspaces/aws-ml-engineering-lifecycle (main) $ 
+
+✅ Running batch transform on test data
+@btholath ➜ /workspaces/aws-ml-engineering-lifecycle (main) $ python 03_deployment/batch_transform_job.py
+2025-07-04 23:44:32,090 [INFO] Found credentials in shared credentials file: ~/.aws/credentials
+2025-07-04 23:44:32,911 [INFO] ✅ Batch transform job started: xgb-loan-batch-transform-1751672672
+2025-07-04 23:44:32,911 [INFO] 📤 Input: s3://btholath-sagemaker-datawrangler-demo/data/sample_loan_fixed_for_xgboost.csv
+2025-07-04 23:44:32,911 [INFO] 📁 Output will be saved to: s3://btholath-sagemaker-datawrangler-demo/batch-output/
+@btholath ➜ /workspaces/aws-ml-engineering-lifecycle (main) $ 
+
+✅ Registering model in SageMaker Model Registry
+@btholath ➜ /workspaces/aws-ml-engineering-lifecycle (main) $ python 03_deployment/register_model.py 
+✅ Model registered: arn:aws:sagemaker:us-east-1:637423309379:model-package/LoanApprovalModelGroup/1
+@btholath ➜ /workspaces/aws-ml-engineering-lifecycle (main) $ 
