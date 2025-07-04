@@ -158,10 +158,10 @@ Moves label column to the front
 Drops headers and saves in numeric-only format
 Uploads the file to S3
 
-@btholath ➜ /workspaces/aws-ml-engineering-lifecycle (main) $ python 02_model_training/prepare_csv_for_xgboost.py
-2025-07-04 22:35:22,474 [INFO] ✅ Saved preprocessed CSV to: ./dataset/sample_loan_ready_for_xgboost.csv
-2025-07-04 22:35:22,486 [INFO] Found credentials in shared credentials file: ~/.aws/credentials
-2025-07-04 22:35:23,140 [INFO] 📤 Uploaded to s3://btholath-sagemaker-datawrangler-demo/data/sample_loan_ready_for_xgboost.csv
+@btholath ➜ /workspaces/aws-ml-engineering-lifecycle (main) $ python 01_data_preparation/transform/prepare_loan_dataset_for_xgboost.py
+2025-07-04 22:53:16,636 [INFO] ✅ CSV ready for XGBoost: ./dataset/sample_loan_ready_for_xgboost.csv
+2025-07-04 22:53:16,647 [INFO] Found credentials in shared credentials file: ~/.aws/credentials
+2025-07-04 22:53:17,296 [INFO] 📤 Uploaded to S3: s3://btholath-sagemaker-datawrangler-demo/data/sample_loan_ready_for_xgboost.csv
 @btholath ➜ /workspaces/aws-ml-engineering-lifecycle (main) $ 
 
 
@@ -169,16 +169,16 @@ Uploads the file to S3
 - /workspaces/aws-ml-engineering-lifecycle/02_model_training/train_xgboost_loan_predictor.py
 
 ```bash
-@btholath ➜ /workspaces/aws-ml-engineering-lifecycle (main) $ python 02_model_training/train_xgboost_loan_predictor.py 
+@btholath ➜ /workspaces/aws-ml-engineering-lifecycle (main) $ python 02_model_training/train_xgboost_loan_predictor.py
 sagemaker.config INFO - Not applying SDK defaults from location: /etc/xdg/sagemaker/config.yaml
 sagemaker.config INFO - Not applying SDK defaults from location: /home/codespace/.config/sagemaker/config.yaml
-2025-07-04 22:36:27,851 [INFO] Found credentials in shared credentials file: ~/.aws/credentials
-2025-07-04 22:36:27,996 [INFO] Ignoring unnecessary instance type: None.
-2025-07-04 22:36:27,996 [INFO] Using XGBoost image URI: 683313688378.dkr.ecr.us-east-1.amazonaws.com/sagemaker-xgboost:1.7-1
-2025-07-04 22:36:27,997 [INFO] Starting SageMaker training job...
-2025-07-04 22:36:28,660 [INFO] ✅ Training job created: real-loan-predictor-xgb-1751668587
-2025-07-04 22:36:28,660 [INFO] 📦 Output S3 path: s3://btholath-sagemaker-datawrangler-demo/real-loan-predictor-output/
-2025-07-04 22:36:28,660 [INFO] 🔗 Job ARN: arn:aws:sagemaker:us-east-1:637423309379:training-job/real-loan-predictor-xgb-1751668587
+2025-07-04 22:54:31,807 [INFO] Found credentials in shared credentials file: ~/.aws/credentials
+2025-07-04 22:54:31,914 [INFO] Ignoring unnecessary instance type: None.
+2025-07-04 22:54:31,914 [INFO] Using XGBoost image URI: 683313688378.dkr.ecr.us-east-1.amazonaws.com/sagemaker-xgboost:1.7-1
+2025-07-04 22:54:31,914 [INFO] Starting SageMaker training job...
+2025-07-04 22:54:32,557 [INFO] ✅ Training job created: real-loan-predictor-xgb-1751669671
+2025-07-04 22:54:32,557 [INFO] 📦 Output S3 path: s3://btholath-sagemaker-datawrangler-demo/real-loan-predictor-output/
+2025-07-04 22:54:32,557 [INFO] 🔗 Job ARN: arn:aws:sagemaker:us-east-1:637423309379:training-job/real-loan-predictor-xgb-1751669671
 @btholath ➜ /workspaces/aws-ml-engineering-lifecycle (main) $ 
 
 You should be seeing the training job in aws console at https://us-east-1.console.aws.amazon.com/sagemaker/home?region=us-east-1#/jobs
