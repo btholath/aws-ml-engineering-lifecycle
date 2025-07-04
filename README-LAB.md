@@ -113,3 +113,22 @@ upload: ./sample_sales_dataset.csv to s3://btholath-sagemaker-datawrangler-demo/
 4. Perform basic transformations, profiling, and export to S3.
 (.venv) @btholath ➜ /workspaces/aws-ml-engineering-lifecycle (main) $ 
 
+***Configuring Data for SageMaker Training Jobs***
+```bash
+(.venv) @btholath ➜ /workspaces/aws-ml-engineering-lifecycle (main) $ python 01_data_preparation//build_dataset/gen_realistic_loan_approval_dataset.py
+
+(.venv) @btholath ➜ /workspaces/aws-ml-engineering-lifecycle (main) $ python 01_data_preparation//build_dataset/csv_to_parquet.py dataset/sample_realistic_loan_approval_dataset.csv
+Input file: dataset/sample_realistic_loan_approval_dataset.csv
+Output file: dataset/sample_realistic_loan_approval_dataset.parquet
+Derived Schema:
+CustomerID: string
+Age: int64
+Gender: string
+EducationLevel: string
+Income: double
+LoanApproved: bool
+-- schema metadata --
+pandas: '{"index_columns": [{"kind": "range", "name": null, "start": 0, "' + 957
+(.venv) @btholath ➜ /workspaces/aws-ml-engineering-lifecycle (main) $ 
+```
+
