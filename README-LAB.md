@@ -34,6 +34,20 @@ chmod +x 06_validate_sagemaker_role.sh
 create_all_resources.sh
 
 ***Delete AWS resources***
+aws sagemaker list-feature-groups --region us-east-1
+
+aws sagemaker describe-feature-group \
+  --feature-group-name loan-approval-feature-group \
+  --region us-east-1
+
+aws sagemaker describe-feature-group \
+  --feature-group-name loan-approval-feature-group \
+  --region us-east-1 \
+  --query 'FeatureGroupStatus'
+
+aws s3 ls s3://btholath-sagemaker-datawrangler-demo/feature-store/
+aws s3 cp s3://btholath-sagemaker-datawrangler-demo/feature-store/your_file.parquet ./local.parquet
+
 aws sagemaker delete-feature-group --feature-group-name loan-approval-feature-group --region us-east-1
 
 
