@@ -19,6 +19,42 @@ Default output format [None]: json
 @btholath ➜ /workspaces $ ./aws-ml-engineering-lifecycle/onetime_generate_project_structure.sh
 ```
 
+***Create and execute scriptes in 00_infrastructure**
+cd /workspaces/aws-ml-engineering-lifecycle/00_infrastructure
+chmod +x 00_create_sagemaker_sg.sh
+chmod +x 00_create_sagemaker_execution_role.sh
+chmod +x 01_create_s3_bucket.sh
+chmod +x 02_create_sagemaker_domain.sh
+chmod +x 03_create_iam_roles.sh
+chmod +x 04_cleanup_resources.sh
+chmod +x 05_check_resource_status.sh
+chmod +x 06_validate_sagemaker_role.sh
+
+./00_create_sagemaker_sg.sh
+./00_create_sagemaker_execution_role.sh
+./01_create_s3_bucket.sh
+./02_create_sagemaker_domain.sh
+
+
+
+@btholath ➜ /workspaces/aws-ml-engineering-lifecycle/00_infrastructure (main) $ chmod +x ./02_create_sagemaker_domain.sh
+🚀 Creating SageMaker Studio domain...
+{
+    "DomainArn": "arn:aws:sagemaker:us-east-1:637423309379:domain/d-urjdcehn8mid",
+    "DomainId": "d-urjdcehn8mid",
+    "Url": "https://d-urjdcehn8mid.studio.us-east-1.sagemaker.aws"
+}
+✅ SageMaker Studio domain creation initiated: sagemaker-studio-domain
+
+https://d-urjdcehn8mid.studio.us-east-1.sagemaker.aws
+
+@btholath ➜ /workspaces/aws-ml-engineering-lifecycle/00_infrastructure (main) $ 
+
+chmod +x 03_create_iam_roles.sh
+chmod +x 04_cleanup_resources.sh
+chmod +x 05_check_resource_status.sh
+./00_infrastructure/06_validate_sagemaker_role.sh
+
 ----------
 
 ```bash
