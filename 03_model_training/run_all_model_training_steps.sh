@@ -3,6 +3,10 @@ set -e
 
 echo "🚀 Starting model training pipeline..."
 
+
+# Load env vars
+source ../.env
+
 echo "🧠 Step 1: Training XGBoost Model"
 python3 01_train_xgboost.py
 

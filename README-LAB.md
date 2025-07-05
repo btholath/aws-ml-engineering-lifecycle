@@ -50,6 +50,8 @@ aws s3 cp s3://btholath-sagemaker-datawrangler-demo/feature-store/your_file.parq
 
 aws sagemaker delete-feature-group --feature-group-name loan-approval-feature-group --region us-east-1
 
+aws s3 cp s3://btholath-sagemaker-datawrangler-demo/data/sample_realistic_loan_approval_dataset_ready.csv \
+          s3://btholath-sagemaker-datawrangler-demo/data/validation/sample_realistic_loan_approval_dataset_ready.csv
 
 
 @btholath ➜ /workspaces/aws-ml-engineering-lifecycle/00_infrastructure (main) $ chmod +x ./02_create_sagemaker_domain.sh
