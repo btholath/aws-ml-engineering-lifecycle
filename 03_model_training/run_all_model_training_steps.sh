@@ -1,13 +1,16 @@
 #!/bin/bash
+set -e
 
-set -e  # Exit on error
 echo "🚀 Starting model training pipeline..."
 
 echo "🧠 Step 1: Training XGBoost Model"
-python 01_train_xgboost.py
+python3 01_train_xgboost.py
+
+# Extract job name
+job_name=$(cat latest_training_job.txt)
 
 echo "🔍 Step 2: Monitoring Training Job"
-python 02_monitor_training.py
+python3 02_monitor_training.py
 
 echo "📈 Step 3: Running Hyperparameter Optimization (HPO)"
 python hpo/01_run_hpo_job.py
