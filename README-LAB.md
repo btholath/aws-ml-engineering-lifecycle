@@ -30,11 +30,10 @@ chmod +x 04_cleanup_resources.sh
 chmod +x 05_check_resource_status.sh
 chmod +x 06_validate_sagemaker_role.sh
 
-./00_create_sagemaker_sg.sh
-./00_create_sagemaker_execution_role.sh
-./01_create_s3_bucket.sh
-./02_create_sagemaker_domain.sh
+***Create AWS resources***
+create_all_resources.sh
 
+***Delete AWS resources***
 
 
 @btholath ➜ /workspaces/aws-ml-engineering-lifecycle/00_infrastructure (main) $ chmod +x ./02_create_sagemaker_domain.sh
