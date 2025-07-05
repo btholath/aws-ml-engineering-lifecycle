@@ -34,6 +34,8 @@ chmod +x 06_validate_sagemaker_role.sh
 create_all_resources.sh
 
 ***Delete AWS resources***
+aws sagemaker delete-feature-group --feature-group-name loan-approval-feature-group --region us-east-1
+
 
 
 @btholath ➜ /workspaces/aws-ml-engineering-lifecycle/00_infrastructure (main) $ chmod +x ./02_create_sagemaker_domain.sh

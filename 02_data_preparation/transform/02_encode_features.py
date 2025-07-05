@@ -36,7 +36,13 @@ try:
     else:
         encoder = OneHotEncoder(drop="first", sparse_output=False, handle_unknown="ignore")
         encoded = encoder.fit_transform(df[existing_cols])
-        encoded_df = pd.DataFrame(encoded, columns=encoder.get_feature_names_out(existing_cols))
+
+        # Sanitize column names for SageMaker Feature Store compatibility
+        encoded_columns = encoder.get_feature_names_out(existing_cols)
+        cleaned_columns = [
+            col.replace("'", "").replace(" ", "_").replace("__", "_") for col in encoded_columns
+        ]
+        encoded_df = pd.DataFrame(encoded, columns=cleaned_columns)
 
         df = df.drop(columns=existing_cols)
         df = pd.concat([df.reset_index(drop=True), encoded_df.reset_index(drop=True)], axis=1)

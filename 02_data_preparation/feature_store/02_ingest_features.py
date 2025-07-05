@@ -14,11 +14,18 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(me
 
 region = os.getenv("AWS_REGION")
 feature_group_name = os.getenv("FEATURE_GROUP_NAME")
+if not feature_group_name:
+    logging.error("❌ FEATURE_GROUP_NAME is not set in the environment or .env file.")
+    exit(1)
 
 # Load dataset
-df = pd.read_csv("01_data/processed/sample_realistic_loan_approval_dataset_ready.csv")
+project_root = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
+input_csv = os.path.join(project_root, "01_data/processed/sample_realistic_loan_approval_dataset_ready.csv")
+df = pd.read_csv("/workspaces/aws-ml-engineering-lifecycle/02_data_preparation/transform/01_data/processed/sample_realistic_loan_approval_dataset_ready.csv")
 df["record_id"] = [f"{i}-{int(time.time())}" for i in range(len(df))]
 df["event_time"] = pd.to_datetime("now", utc=True)
+df["event_time"] = df["event_time"].dt.strftime('%Y-%m-%dT%H:%M:%S.%fZ')  # Format for SageMaker
+
 
 # Load feature group
 session = Session()
