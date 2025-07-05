@@ -1,13 +1,23 @@
 #!/bin/bash
-# Creates the S3 bucket if it does not already exist
 
 source "$(dirname "$0")/../.env"
 
+BUCKET_NAME="$S3_BUCKET"
+REGION="$AWS_REGION"
 
-if aws s3api head-bucket --bucket "$S3_BUCKET" 2>/dev/null; then
-    echo "⚠️  Bucket $S3_BUCKET already exists."
+echo "🚀 Creating bucket $BUCKET_NAME in region $REGION..."
+
+# Check if the bucket already exists
+if aws s3api head-bucket --bucket "$BUCKET_NAME" 2>/dev/null; then
+  echo "⚠️  Bucket already exists: $BUCKET_NAME"
 else
-    echo "🚀 Creating bucket $S3_BUCKET in region $AWS_REGION..."
-    aws s3api create-bucket --bucket "$S3_BUCKET" --create-bucket-configuration LocationConstraint=$AWS_REGION
-    echo "✅ Bucket created: $S3_BUCKET"
+  if [ "$REGION" == "us-east-1" ]; then
+    aws s3api create-bucket --bucket "$BUCKET_NAME" --region "$REGION"
+  else
+    aws s3api create-bucket \
+      --bucket "$BUCKET_NAME" \
+      --region "$REGION" \
+      --create-bucket-configuration LocationConstraint="$REGION"
+  fi
+  echo "✅ Bucket created: $BUCKET_NAME"
 fi
