@@ -12,6 +12,15 @@ Default region name [None]: ....
 Default output format [None]: json
 ```
 
+----------
+***one-time setup of folder structure***
+```bash
+@btholath ➜ /workspaces $ chmod +x aws-ml-engineering-lifecycle/onetime_generate_project_structure.sh
+@btholath ➜ /workspaces $ ./aws-ml-engineering-lifecycle/onetime_generate_project_structure.sh
+```
+
+----------
+
 ```bash
 (.venv) @btholath ➜ /workspaces/aws-ml-engineering-lifecycle (main) $ python 01_data_preparation/build_dataset/gen_home_sales_dataset.py 
 Dataset generated and saved as ./dataset/sample_home_sales_dataset.csv
