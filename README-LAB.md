@@ -283,7 +283,7 @@ Name: count, dtype: int64
 
 
 
-After training succeeds, I can help with:
+After training succeeds, 
 ✅ Monitoring job and fetching logs
 @btholath ➜ /workspaces/aws-ml-engineering-lifecycle (main) $ python 02_model_training/monitor_training_job.py 
 2025-07-04 23:31:51,868 [INFO] Found credentials in shared credentials file: ~/.aws/credentials
@@ -307,3 +307,11 @@ After training succeeds, I can help with:
 @btholath ➜ /workspaces/aws-ml-engineering-lifecycle (main) $ python 03_deployment/register_model.py 
 ✅ Model registered: arn:aws:sagemaker:us-east-1:637423309379:model-package/LoanApprovalModelGroup/1
 @btholath ➜ /workspaces/aws-ml-engineering-lifecycle (main) $ 
+
+
+
+✅ Automatically approve this model version
+
+✅ Deploy from Model Registry
+
+✅ Compare and promote best models based on evaluation metrics
