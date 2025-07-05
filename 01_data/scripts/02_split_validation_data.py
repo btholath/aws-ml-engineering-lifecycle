@@ -17,9 +17,9 @@ from sklearn.model_selection import train_test_split
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 
 # Define input/output paths
-raw_data_path = "01_data/raw/sample_realistic_loan_approval_dataset.csv"
-train_output_path = "01_data/processed/sample_realistic_loan_approval_dataset_train.csv"
-valid_output_path = "01_data/validation/sample_realistic_loan_approval_dataset_valid.csv"
+raw_data_path = "/workspaces/aws-ml-engineering-lifecycle/01_data/raw/sample_realistic_loan_approval_dataset.csv"
+train_output_path = "/workspaces/aws-ml-engineering-lifecycle/01_data/processed/sample_realistic_loan_approval_dataset_train.csv"
+valid_output_path = "/workspaces/aws-ml-engineering-lifecycle/01_data/validation/sample_realistic_loan_approval_dataset_valid.csv"
 
 # Create output folders if not exist
 os.makedirs(os.path.dirname(train_output_path), exist_ok=True)
