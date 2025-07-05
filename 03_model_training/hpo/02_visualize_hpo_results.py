@@ -19,7 +19,7 @@ sm = boto3.client("sagemaker")
 response = sm.list_training_jobs_for_hyper_parameter_tuning_job(
     HyperParameterTuningJobName=tuning_job_name,
     MaxResults=10,
-    SortBy='ObjectiveMetricValue',
+    SortBy='FinalObjectiveMetricValue',
     SortOrder='Ascending'
 )
 
