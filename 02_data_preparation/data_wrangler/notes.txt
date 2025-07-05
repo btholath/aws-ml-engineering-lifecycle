@@ -1,4 +1,21 @@
 # Optional:
 02_data_preparation/data_wrangler/
-├── 01_generate_flow.py
-├── 02_upload_flow.py
+├── 01_generate_flow.py        # Create a .flow JSON programmatically
+├── 02_upload_flow.py          # Upload the .flow file to S3
+├── template.flow              # Optional template or version-controlled flow
+└── __init__.py
+
+This stage lets you:
+Automate creation of a .flow file (JSON) that describes your transformations.
+Upload that .flow to S3 so you can open it in SageMaker Studio.
+From Studio, you can visually apply transforms or export a processed dataset.
+
+
+chmod +x 02_data_preparation/data_wrangler/run_data_wrangler_flow.sh
+./02_data_preparation/data_wrangler/run_data_wrangler_flow.sh
+
+- check if the file is created ?
+aws s3 ls s3://btholath-sagemaker-datawrangler-demo/data-wrangler/flows/customer_sales_cleaning.flow
+
+- Then:
+🔁 Go to SageMaker Studio → Data Wrangler → Import Flow → From S3
