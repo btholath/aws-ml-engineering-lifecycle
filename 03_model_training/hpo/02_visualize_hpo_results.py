@@ -1,25 +1,51 @@
-"""
-Visualize HPO results using SageMaker SDK and matplotlib.
-"""
-import boto3, pandas as pd, matplotlib.pyplot as plt
-from dotenv import load_dotenv
 import os
+import boto3
+import pandas as pd
+import matplotlib.pyplot as plt
+from dotenv import load_dotenv
 
+# Load .env file
 load_dotenv()
-sm = boto3.client("sagemaker", region_name=os.getenv("AWS_REGION"))
-tuning_job_name = os.getenv("HPO_JOB_NAME")
 
+# Read tuning job name
+tuning_job_name = os.getenv("HPO_TUNING_JOB_NAME")
+if not tuning_job_name:
+    raise ValueError("❌ HPO_TUNING_JOB_NAME is not set in the environment or .env file.")
+
+# Initialize SageMaker client
+sm = boto3.client("sagemaker")
+
+# List training jobs for the HPO tuning job
 response = sm.list_training_jobs_for_hyper_parameter_tuning_job(
-    HyperParameterTuningJobName=tuning_job_name
+    HyperParameterTuningJobName=tuning_job_name,
+    MaxResults=10,
+    SortBy='ObjectiveMetricValue',
+    SortOrder='Ascending'
 )
-results = []
-for job in response["TrainingJobSummaries"]:
-    results.append({
-        "JobName": job["TrainingJobName"],
-        "AUC": job["FinalHyperParameterTuningJobObjectiveMetric"]["Value"]
+
+# Extract results
+training_jobs = response["TrainingJobSummaries"]
+
+# Convert to pandas DataFrame for easier visualization
+records = []
+for job in training_jobs:
+    records.append({
+        "TrainingJobName": job["TrainingJobName"],
+        "ObjectiveValue": job.get("FinalHyperParameterTuningJobObjectiveMetric", {}).get("Value", None),
+        "Status": job["TrainingJobStatus"]
     })
 
-df = pd.DataFrame(results).sort_values("AUC", ascending=False)
-df.plot(kind="bar", x="JobName", y="AUC", title="HPO Results: AUC Scores")
-plt.tight_layout()
-plt.savefig("hpo_results.png")
+df = pd.DataFrame(records)
+print(df)
+
+# Visualize results (if objective value exists)
+if not df["ObjectiveValue"].isnull().all():
+    plt.figure(figsize=(10, 6))
+    plt.barh(df["TrainingJobName"], df["ObjectiveValue"], color="skyblue")
+    plt.xlabel("Objective Metric (logloss)")
+    plt.ylabel("Training Job")
+    plt.title(f"Top HPO Results for: {tuning_job_name}")
+    plt.tight_layout()
+    plt.show()
+else:
+    print("⚠️ No completed training jobs with objective values found.")

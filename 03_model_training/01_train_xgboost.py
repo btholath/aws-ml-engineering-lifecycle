@@ -14,6 +14,12 @@ role = os.getenv("SAGEMAKER_ROLE_ARN")
 bucket = os.getenv("S3_BUCKET")
 region = os.getenv("AWS_REGION", "us-east-1")
 
+role = os.getenv("SAGEMAKER_ROLE_ARN")
+if not role:
+    raise ValueError("❌ SAGEMAKER_ROLE_ARN is not set in the environment or .env file.")
+print(f"Using SageMaker Role ARN: {role}")
+
+
 # Logging setup
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

@@ -447,3 +447,20 @@ After training succeeds,
 ✅ Deploy from Model Registry
 
 ✅ Compare and promote best models based on evaluation metrics
+
+
+Run the training job monitor (if you have it set up):
+
+python 03_model_training/02_monitor_training.py
+Trigger Hyperparameter Optimization (HPO):
+
+
+python 03_model_training/hpo/01_run_hpo_job.py
+Visualize HPO results:
+
+python 03_model_training/hpo/02_visualize_hpo_results.py
+Register model to SageMaker Model Registry (optional):
+
+python 04_model_registry/01_register_model.py
+Deploy to a real-time endpoint or run a batch transform job.
+
