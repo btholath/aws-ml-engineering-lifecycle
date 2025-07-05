@@ -1,13 +1,14 @@
 #!/bin/bash
-# This script assumes that the IAM role already exists.
-# It attaches a policy to the existing SageMaker Execution Role if needed.
+# This script attaches a policy to the SageMaker Execution Role
 
 source "$(dirname "$0")/../.env"
 
+ROLE_NAME=$(echo "$SAGEMAKER_ROLE_ARN" | cut -d'/' -f2)
 
-echo "ℹ️ Attaching AmazonSageMakerFullAccess to role: $SAGEMAKER_ROLE_ARN"
-aws iam attach-role-policy \\
-    --role-name "$(basename $SAGEMAKER_ROLE_ARN)" \\
-    --policy-arn arn:aws:iam::aws:policy/AmazonSageMakerFullAccess
+echo "ℹ️ Attaching AmazonSageMakerFullAccess to role: $ROLE_NAME"
+
+aws iam attach-role-policy \
+  --role-name "$ROLE_NAME" \
+  --policy-arn arn:aws:iam::aws:policy/AmazonSageMakerFullAccess
 
 echo "✅ Role updated: $SAGEMAKER_ROLE_ARN"

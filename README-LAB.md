@@ -50,10 +50,18 @@ https://d-urjdcehn8mid.studio.us-east-1.sagemaker.aws
 
 @btholath ➜ /workspaces/aws-ml-engineering-lifecycle/00_infrastructure (main) $ 
 
-chmod +x 03_create_iam_roles.sh
-chmod +x 04_cleanup_resources.sh
-chmod +x 05_check_resource_status.sh
-./00_infrastructure/06_validate_sagemaker_role.sh
+
+@btholath ➜ /workspaces/aws-ml-engineering-lifecycle/00_infrastructure (main) $ ./03_create_iam_roles.sh
+ℹ️ Attaching AmazonSageMakerFullAccess to role: AmazonSageMakerExecutionRole
+✅ Role updated: arn:aws:iam::637423309379:role/AmazonSageMakerExecutionRole
+
+
+@btholath ➜ /workspaces/aws-ml-engineering-lifecycle/00_infrastructure (main) $ ./04_cleanup_resources.sh
+
+
+./05_check_resource_status.sh
+
+./06_validate_sagemaker_role.sh
 
 ----------
 
