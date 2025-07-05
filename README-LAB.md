@@ -63,6 +63,68 @@ https://d-urjdcehn8mid.studio.us-east-1.sagemaker.aws
 
 ./06_validate_sagemaker_role.sh
 
+*** organize the natural execution flow of the scripts in 02_data_preparation/ based on the machine learning lifecycle and dependencies between stages.***
+Recommended Execution Order (with Reasoning)
+1️⃣ data_wrangler/ – Visual Data Preparation (Optional but GUI-friendly)
+Use this if you're preparing your dataset visually in SageMaker Studio.
+
+Execution Order:
+
+Step	Script	Purpose
+1	01_generate_flow.py	Programmatically generate a .flow file with transform steps (impute, encode, rename, etc.)
+2	02_upload_flow.py	Upload the .flow to S3 so SageMaker Studio can import it
+3	(In Studio)	Use SageMaker Data Wrangler UI to apply, explore, export
+–	template.flow	Template or auto-generated file
+
+🔄 Optional: Use only if you prefer Data Wrangler GUI to generate the final transformed dataset.
+
+2️⃣ transform/ – Programmatic Data Cleaning Pipeline
+Use this path for fully scripted data prep (ideal for reproducibility and automation).
+
+Execution Order:
+
+Step	Script	Purpose
+1	01_clean_data.py	Handle missing values, normalize numerics
+2	02_encode_features.py	One-hot encode categorical variables (e.g., Gender, EducationLevel)
+3	03_fix_booleans_and_upload.py	Convert TRUE/FALSE to 1/0, rename LoanApproved → label, upload to S3
+4	04_validate_dataset.py	Check for schema validity, data types, nulls
+5	05_generate_statistics.py	Basic statistics, distributions, for visualization & QC
+
+🔁 This is your main path if you're training using XGBoost or scripts (not Studio GUI).
+
+3️⃣ feature_store/ – Advanced Option: Feature Reuse / Monitoring
+Use this if you're managing features across multiple models or teams.
+
+Execution Order:
+
+Step	Script	Purpose
+1	01_create_feature_group.py	Create SageMaker Feature Group (defines schema, keys, etc.)
+2	02_ingest_features.py	Ingest features into the group from a DataFrame or CSV
+
+🧠 Use after data is cleaned and transformed (i.e., after transform/03_fix_booleans_and_upload.py).
+
+🔁 Final Workflow Recommendation
+# For most automation pipelines (non-GUI):
+
+02_data_preparation/transform/
+├── 01_clean_data.py
+├── 02_encode_features.py
+├── 03_fix_booleans_and_upload.py
+├── 04_validate_dataset.py
+├── 05_generate_statistics.py
+
+# Optional:
+02_data_preparation/data_wrangler/
+├── 01_generate_flow.py
+├── 02_upload_flow.py
+
+# Optional (advanced MLOps):
+02_data_preparation/feature_store/
+├── 01_create_feature_group.py
+├── 02_ingest_features.py
+
+
+END-OF_TASKS
 ----------
 
 ```bash
