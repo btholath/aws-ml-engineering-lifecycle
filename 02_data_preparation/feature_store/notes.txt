@@ -1,0 +1,4 @@
+# Optional (advanced MLOps):
+02_data_preparation/feature_store/
+├── 01_create_feature_group.py
+├── 02_ingest_features.py

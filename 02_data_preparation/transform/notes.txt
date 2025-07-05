@@ -1,0 +1,8 @@
+# For most automation pipelines (non-GUI):
+
+02_data_preparation/transform/
+├── 01_clean_data.py
+├── 02_encode_features.py
+├── 03_fix_booleans_and_upload.py
+├── 04_validate_dataset.py
+├── 05_generate_statistics.py
