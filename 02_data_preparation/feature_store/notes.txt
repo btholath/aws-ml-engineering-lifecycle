@@ -20,5 +20,16 @@ Here are the steps to use SageMaker Feature Store
     - Batch ingestion with AWS Glue or Lambda
     - Validate data integrity during ingestion to prevent corrupt records.
     - Use automated retries for failed ingestio  attempts to ensure reliability.
-    
+- Accessing features
+    - Query online store for low-latency Access
+    - Use offline store for analyltics with Athena.
+    - Build training datasets using features
+
+Storage
+Type       Description
+online     Designed for low-latency, real-time access to feature data.
+            Stored in a high-performance database managed by sagemaker.
+offline     Designed for batch processing, historical data anlaysis, and feature engineering.
+            Persistently stored in S3.
+Online and Offline  - Combination of both
 
