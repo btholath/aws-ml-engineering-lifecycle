@@ -2,6 +2,31 @@
 set -e
 set -o pipefail
 
+echo "🧹 Cleaning up old SageMaker Studio domain (if exists)..."
+
+# Delete SageMaker Studio domain if it exists
+REGION=$(aws configure get region)
+DOMAIN_NAME=$(aws sagemaker list-domains --region $REGION --query "Domains[0].DomainName" --output text)
+
+if [ "$DOMAIN_NAME" != "None" ]; then
+  echo "⚠️  Found existing Studio Domain: $DOMAIN_NAME. Deleting..."
+  DOMAIN_ID=$(aws sagemaker list-domains --region $REGION --query "Domains[0].DomainId" --output text)
+  
+  # Delete user profiles under the domain
+  USER_PROFILES=$(aws sagemaker list-user-profiles --domain-id-equals "$DOMAIN_ID" --region $REGION --query "UserProfiles[].UserProfileName" --output text)
+
+  for PROFILE in $USER_PROFILES; do
+    echo "🧽 Deleting user profile: $PROFILE"
+    aws sagemaker delete-user-profile --domain-id "$DOMAIN_ID" --user-profile-name "$PROFILE" --region $REGION
+  done
+
+  # Delete the domain
+  aws sagemaker delete-domain --domain-id "$DOMAIN_ID" --region $REGION --no-retain-deployment-type
+  echo "✅ SageMaker Studio Domain deleted: $DOMAIN_NAME"
+else
+  echo "ℹ️ No existing SageMaker Studio domain found."
+fi
+
 echo "🚀 Starting ML environment setup..."
 
 # Step 1: Infrastructure
