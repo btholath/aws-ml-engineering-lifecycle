@@ -1,0 +1,21 @@
+01_register_model.py: Registering the best trained model from your HPO job
+02_approve_model.py: Approving a model version.
+03_deploy_from_registry.py: Deploying an approved model from the SageMaker Model Registry.
+
+
+HPO = Hyperparameter Optimization (HPO)
+The python 03_model_training/hpo/02_visualize_hpo_results.py
+It printed the top-performing hyperparameter tuning job results:
+
+                    TrainingJobName              ObjectiveValue     Status
+0  xgb-hpo-250705-2307-002-ddb45a10         0.00107               Completed
+1  xgb-hpo-250705-2307-003-4d5ed045         0.00157               Completed
+2  xgb-hpo-250705-2307-005-5bc05da7         0.00269               Completed
+3  xgb-hpo-250705-2307-004-fa467949         0.00279               Completed
+4  xgb-hpo-250705-2307-001-f1aa904b         0.08686               Completed
+
+So here, your Hyperparameter Optimization (HPO) job name is: xgb-hpo-250705-2307
+And the best-performing model from this HPO job is: 
+Training Job Name: xgb-hpo-250705-2307-002-ddb45a10
+Objective Value:   0.00107
+This model is what you'll want to register in SageMaker Model Registry in step 01_register_model.py.
