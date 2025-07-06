@@ -687,4 +687,276 @@ INFO:botocore.credentials:Found credentials in shared credentials file: ~/.aws/c
 INFO:sagemaker.telemetry.telemetry_logging:SageMaker Python SDK will collect telemetry to help us better understand our user's needs, diagnose issues, and deliver additional features.
 To opt out of telemetry, please disable via TelemetryOptOut parameter in SDK defaults config. For more information, refer to https://sagemaker.readthedocs.io/en/stable/overview.html#configuring-and-using-defaults-with-the-sagemaker-python-sdk.
 INFO:sagemaker:Creating training-job with name: sagemaker-xgboost-2025-07-06-01-16-08-685
-2025-07-06 01:16:11 Starting - Starting the training job..
+2025-07-06 01:16:11 Starting - Starting the training job...
+2025-07-06 01:16:26 Starting - Preparing the instances for training...
+2025-07-06 01:16:46 Downloading - Downloading input data...
+2025-07-06 01:17:27 Downloading - Downloading the training image......
+2025-07-06 01:18:43 Training - Training image download completed. Training in progress.
+2025-07-06 01:18:43 Uploading - Uploading generated training model[2025-07-06 01:18:34.414 ip-10-2-250-52.ec2.internal:6 INFO utils.py:28] RULE_JOB_STOP_SIGNAL_FILENAME: None
+[2025-07-06 01:18:34.447 ip-10-2-250-52.ec2.internal:6 INFO profiler_config_parser.py:111] User has disabled profiler.
+[2025-07-06:01:18:34:INFO] Imported framework sagemaker_xgboost_container.training
+[2025-07-06:01:18:34:INFO] Failed to parse hyperparameter objective value binary:logistic to Json.
+Returning the value itself
+[2025-07-06:01:18:34:INFO] No GPUs detected (normal if no gpus installed)
+[2025-07-06:01:18:34:INFO] Running XGBoost Sagemaker in algorithm mode
+[2025-07-06:01:18:34:INFO] Determined 0 GPU(s) available on the instance.
+[2025-07-06:01:18:34:INFO] Determined delimiter of CSV input is ','
+[2025-07-06:01:18:34:INFO] File path /opt/ml/input/data/train of input files
+[2025-07-06:01:18:34:INFO] Making smlinks from folder /opt/ml/input/data/train to folder /tmp/sagemaker_xgboost_input_data
+[2025-07-06:01:18:34:INFO] creating symlink between Path /opt/ml/input/data/train/sample_realistic_loan_approval_dataset_ready.csv and destination /tmp/sagemaker_xgboost_input_data/sample_realistic_loan_approval_dataset_ready.csv2119781066709000894
+[2025-07-06:01:18:34:INFO] files path: /tmp/sagemaker_xgboost_input_data
+[2025-07-06:01:18:34:INFO] Determined delimiter of CSV input is ','
+[2025-07-06:01:18:34:INFO] Single node training.
+[2025-07-06:01:18:34:INFO] Train matrix has 5001 rows and 9 columns
+[2025-07-06 01:18:34.886 ip-10-2-250-52.ec2.internal:6 INFO json_config.py:92] Creating hook from json_config at /opt/ml/input/config/debughookconfig.json.
+[2025-07-06 01:18:34.887 ip-10-2-250-52.ec2.internal:6 INFO hook.py:206] tensorboard_dir has not been set for the hook. SMDebug will not be exporting tensorboard summaries.
+[2025-07-06 01:18:34.888 ip-10-2-250-52.ec2.internal:6 INFO hook.py:259] Saving to /opt/ml/output/tensors
+[2025-07-06 01:18:34.888 ip-10-2-250-52.ec2.internal:6 INFO state_store.py:77] The checkpoint config file /opt/ml/input/config/checkpointconfig.json does not exist.
+[2025-07-06:01:18:34:INFO] Debug hook created from config
+[2025-07-06 01:18:34.894 ip-10-2-250-52.ec2.internal:6 INFO hook.py:427] Monitoring the collections: metrics
+[2025-07-06 01:18:34.897 ip-10-2-250-52.ec2.internal:6 INFO hook.py:491] Hook is writing from the hook with pid: 6
+[0]#011train-logloss:0.51314
+[1]#011train-logloss:0.39219
+[2]#011train-logloss:0.30547
+[3]#011train-logloss:0.24091
+[4]#011train-logloss:0.19167
+[5]#011train-logloss:0.15347
+[6]#011train-logloss:0.12347
+[7]#011train-logloss:0.09971
+[8]#011train-logloss:0.08076
+[9]#011train-logloss:0.06556
+[10]#011train-logloss:0.05332
+[11]#011train-logloss:0.04343
+[12]#011train-logloss:0.03542
+[13]#011train-logloss:0.02892
+[14]#011train-logloss:0.02364
+[15]#011train-logloss:0.01934
+[16]#011train-logloss:0.01583
+[17]#011train-logloss:0.01297
+[18]#011train-logloss:0.01064
+[19]#011train-logloss:0.00873
+[20]#011train-logloss:0.00718
+[21]#011train-logloss:0.00590
+[22]#011train-logloss:0.00486
+[23]#011train-logloss:0.00401
+[24]#011train-logloss:0.00331
+[25]#011train-logloss:0.00274
+[26]#011train-logloss:0.00228
+[27]#011train-logloss:0.00189
+[28]#011train-logloss:0.00158
+[29]#011train-logloss:0.00132
+[30]#011train-logloss:0.00111
+[31]#011train-logloss:0.00094
+[32]#011train-logloss:0.00080
+[33]#011train-logloss:0.00068
+[34]#011train-logloss:0.00058
+[35]#011train-logloss:0.00050
+[36]#011train-logloss:0.00043
+[37]#011train-logloss:0.00038
+[38]#011train-logloss:0.00033
+[39]#011train-logloss:0.00029
+[40]#011train-logloss:0.00026
+[41]#011train-logloss:0.00023
+[42]#011train-logloss:0.00021
+[43]#011train-logloss:0.00019
+[44]#011train-logloss:0.00019
+[45]#011train-logloss:0.00019
+[46]#011train-logloss:0.00019
+[47]#011train-logloss:0.00019
+[48]#011train-logloss:0.00019
+[49]#011train-logloss:0.00019
+[50]#011train-logloss:0.00019
+[51]#011train-logloss:0.00019
+[52]#011train-logloss:0.00019
+[53]#011train-logloss:0.00019
+[54]#011train-logloss:0.00019
+[55]#011train-logloss:0.00019
+[56]#011train-logloss:0.00019
+[57]#011train-logloss:0.00019
+[58]#011train-logloss:0.00019
+[59]#011train-logloss:0.00019
+[60]#011train-logloss:0.00019
+[61]#011train-logloss:0.00019
+[62]#011train-logloss:0.00019
+[63]#011train-logloss:0.00019
+[64]#011train-logloss:0.00019
+[65]#011train-logloss:0.00019
+[66]#011train-logloss:0.00019
+[67]#011train-logloss:0.00019
+[68]#011train-logloss:0.00019
+[69]#011train-logloss:0.00019
+[70]#011train-logloss:0.00019
+[71]#011train-logloss:0.00019
+[72]#011train-logloss:0.00019
+[73]#011train-logloss:0.00019
+[74]#011train-logloss:0.00019
+[75]#011train-logloss:0.00019
+[76]#011train-logloss:0.00019
+[77]#011train-logloss:0.00019
+[78]#011train-logloss:0.00019
+[79]#011train-logloss:0.00019
+[80]#011train-logloss:0.00019
+[81]#011train-logloss:0.00019
+[82]#011train-logloss:0.00019
+[83]#011train-logloss:0.00019
+[84]#011train-logloss:0.00019
+[85]#011train-logloss:0.00019
+[86]#011train-logloss:0.00019
+[87]#011train-logloss:0.00019
+[88]#011train-logloss:0.00019
+[89]#011train-logloss:0.00019
+[90]#011train-logloss:0.00019
+[91]#011train-logloss:0.00019
+[92]#011train-logloss:0.00019
+[93]#011train-logloss:0.00019
+[94]#011train-logloss:0.00019
+[95]#011train-logloss:0.00019
+[96]#011train-logloss:0.00019
+[97]#011train-logloss:0.00019
+[98]#011train-logloss:0.00019
+[99]#011train-logloss:0.00019
+
+2025-07-06 01:18:56 Completed - Training job completed
+Training seconds: 130
+Billable seconds: 130
+INFO:__main__:✅ XGBoost training job submitted
+🔍 Step 2: Monitoring Training Job
+INFO:botocore.credentials:Found credentials in shared credentials file: ~/.aws/credentials
+INFO:root:📊 Training job 'sagemaker-xgboost-2025-07-06-01-16-08-685' status: Completed
+INFO:root:📦 Model saved to: s3://btholath-sagemaker-datawrangler-demo/output/sagemaker-xgboost-2025-07-06-01-16-08-685/output/model.tar.gz
+📈 Step 3: Running Hyperparameter Optimization (HPO)
+sagemaker.config INFO - Not applying SDK defaults from location: /etc/xdg/sagemaker/config.yaml
+sagemaker.config INFO - Not applying SDK defaults from location: /home/codespace/.config/sagemaker/config.yaml
+INFO:sagemaker.image_uris:Ignoring unnecessary instance type: None.
+INFO:botocore.credentials:Found credentials in shared credentials file: ~/.aws/credentials
+INFO:botocore.credentials:Found credentials in shared credentials file: ~/.aws/credentials
+WARNING:sagemaker.estimator:No finished training job found associated with this estimator. Please make sure this estimator is only used for building workflow config
+INFO:sagemaker:Creating hyperparameter tuning job with name: xgb-hpo-250706-0119
+╭─────────────────────────────── Traceback (most recent call last) ────────────────────────────────╮
+│ /workspaces/aws-ml-engineering-lifecycle/03_model_training/hpo/01_run_hpo_job.py:127 in <module> │
+│                                                                                                  │
+│   124                                                                                            │
+│   125                                                                                            │
+│   126 if __name__ == "__main__":                                                                 │
+│ ❱ 127 │   main()                                                                                 │
+│   128                                                                                            │
+│                                                                                                  │
+│ /workspaces/aws-ml-engineering-lifecycle/03_model_training/hpo/01_run_hpo_job.py:122 in main     │
+│                                                                                                  │
+│   119 │   │   content_type="csv"                                                                 │
+│   120 │   )                                                                                      │
+│   121 │                                                                                          │
+│ ❱ 122 │   tuner.fit({"train": train_input, "validation": validation_input})                      │
+│   123 │   logger.info(f"🚀 HPO job submitted: {tuning_job_name}")                                │
+│   124                                                                                            │
+│   125                                                                                            │
+│                                                                                                  │
+│ /usr/local/python/3.12.1/lib/python3.12/site-packages/sagemaker/workflow/pipeline_context.py:346 │
+│ in wrapper                                                                                       │
+│                                                                                                  │
+│   343 │   │   │                                                                                  │
+│   344 │   │   │   return _StepArguments(retrieve_caller_name(self_instance), run_func, *args,    │
+│   345 │   │                                                                                      │
+│ ❱ 346 │   │   return run_func(*args, **kwargs)                                                   │
+│   347 │                                                                                          │
+│   348 │   return wrapper                                                                         │
+│   349                                                                                            │
+│                                                                                                  │
+│ /usr/local/python/3.12.1/lib/python3.12/site-packages/sagemaker/tuner.py:1034 in fit             │
+│                                                                                                  │
+│   1031 │   │   │   │   arguments are needed.                                                     │
+│   1032 │   │   """                                                                               │
+│   1033 │   │   if self.estimator is not None:                                                    │
+│ ❱ 1034 │   │   │   self._fit_with_estimator(inputs, job_name, include_cls_metadata, **kwargs)    │
+│   1035 │   │   else:                                                                             │
+│   1036 │   │   │   self._fit_with_estimator_dict(inputs, job_name, include_cls_metadata, estima  │
+│   1037                                                                                           │
+│                                                                                                  │
+│ /usr/local/python/3.12.1/lib/python3.12/site-packages/sagemaker/tuner.py:1045 in                 │
+│ _fit_with_estimator                                                                              │
+│                                                                                                  │
+│   1042 │   │   """Start tuning for tuner instances that have the ``estimator`` field set."""     │
+│   1043 │   │   self._prepare_estimator_for_tuning(self.estimator, inputs, job_name, **kwargs)    │
+│   1044 │   │   self._prepare_for_tuning(job_name=job_name, include_cls_metadata=include_cls_met  │
+│ ❱ 1045 │   │   self.latest_tuning_job = _TuningJob.start_new(self, inputs)                       │
+│   1046 │                                                                                         │
+│   1047 │   def _fit_with_estimator_dict(self, inputs, job_name, include_cls_metadata, estimator  │
+│   1048 │   │   """Start tuning for tuner instances that have the ``estimator_dict`` field set."  │
+│                                                                                                  │
+│ /usr/local/python/3.12.1/lib/python3.12/site-packages/sagemaker/tuner.py:2143 in start_new       │
+│                                                                                                  │
+│   2140 │   │   """                                                                               │
+│   2141 │   │   tuner_args = cls._get_tuner_args(tuner, inputs)                                   │
+│   2142 │   │                                                                                     │
+│ ❱ 2143 │   │   tuner.sagemaker_session.create_tuning_job(**tuner_args)                           │
+│   2144 │   │                                                                                     │
+│   2145 │   │   return cls(tuner.sagemaker_session, tuner._current_job_name)                      │
+│   2146                                                                                           │
+│                                                                                                  │
+│ /usr/local/python/3.12.1/lib/python3.12/site-packages/sagemaker/session.py:3398 in               │
+│ create_tuning_job                                                                                │
+│                                                                                                  │
+│   3395 │   │   │   logger.debug("tune request: %s", json.dumps(request, indent=4))               │
+│   3396 │   │   │   self.sagemaker_client.create_hyper_parameter_tuning_job(**request)            │
+│   3397 │   │                                                                                     │
+│ ❱ 3398 │   │   self._intercept_create_request(tune_request, submit, self.create_tuning_job.__na  │
+│   3399 │                                                                                         │
+│   3400 │   def _get_tuning_request(                                                              │
+│   3401 │   │   self,                                                                             │
+│                                                                                                  │
+│ /usr/local/python/3.12.1/lib/python3.12/site-packages/sagemaker/session.py:6819 in               │
+│ _intercept_create_request                                                                        │
+│                                                                                                  │
+│   6816 │   │   │   create (functor): a functor calls the sagemaker client create method          │
+│   6817 │   │   │   func_name (str): the name of the function needed intercepting                 │
+│   6818 │   │   """                                                                               │
+│ ❱ 6819 │   │   return create(request)                                                            │
+│   6820 │                                                                                         │
+│   6821 │   def _create_inference_recommendations_job_request(                                    │
+│   6822 │   │   self,                                                                             │
+│                                                                                                  │
+│ /usr/local/python/3.12.1/lib/python3.12/site-packages/sagemaker/session.py:3396 in submit        │
+│                                                                                                  │
+│   3393 │   │   def submit(request):                                                              │
+│   3394 │   │   │   logger.info("Creating hyperparameter tuning job with name: %s", job_name)     │
+│   3395 │   │   │   logger.debug("tune request: %s", json.dumps(request, indent=4))               │
+│ ❱ 3396 │   │   │   self.sagemaker_client.create_hyper_parameter_tuning_job(**request)            │
+│   3397 │   │                                                                                     │
+│   3398 │   │   self._intercept_create_request(tune_request, submit, self.create_tuning_job.__na  │
+│   3399                                                                                           │
+│                                                                                                  │
+│ /usr/local/python/3.12.1/lib/python3.12/site-packages/botocore/client.py:601 in _api_call        │
+│                                                                                                  │
+│    598 │   │   │   │   │   f"{py_operation_name}() only accepts keyword arguments."              │
+│    599 │   │   │   │   )                                                                         │
+│    600 │   │   │   # The "self" in this scope is referring to the BaseClient.                    │
+│ ❱  601 │   │   │   return self._make_api_call(operation_name, kwargs)                            │
+│    602 │   │                                                                                     │
+│    603 │   │   _api_call.__name__ = str(py_operation_name)                                       │
+│    604                                                                                           │
+│                                                                                                  │
+│ /usr/local/python/3.12.1/lib/python3.12/site-packages/botocore/context.py:123 in wrapper         │
+│                                                                                                  │
+│   120 │   │   │   with start_as_current_context():                                               │
+│   121 │   │   │   │   if hook:                                                                   │
+│   122 │   │   │   │   │   hook()                                                                 │
+│ ❱ 123 │   │   │   │   return func(*args, **kwargs)                                               │
+│   124 │   │                                                                                      │
+│   125 │   │   return wrapper                                                                     │
+│   126                                                                                            │
+│                                                                                                  │
+│ /usr/local/python/3.12.1/lib/python3.12/site-packages/botocore/client.py:1074 in _make_api_call  │
+│                                                                                                  │
+│   1071 │   │   │   │   "Code"                                                                    │
+│   1072 │   │   │   )                                                                             │
+│   1073 │   │   │   error_class = self.exceptions.from_code(error_code)                           │
+│ ❱ 1074 │   │   │   raise error_class(parsed_response, operation_name)                            │
+│   1075 │   │   else:                                                                             │
+│   1076 │   │   │   return parsed_response                                                        │
+│   1077                                                                                           │
+╰──────────────────────────────────────────────────────────────────────────────────────────────────╯
+ClientError: An error occurred (ValidationException) when calling the CreateHyperParameterTuningJob operation: No S3 objects found under S3 URL 
+"s3://btholath-sagemaker-datawrangler-demo/data/validation/sample_realistic_loan_approval_dataset_ready.csv" given in input data source. Please ensure that the bucket 
+exists in the selected region (us-east-1), that objects exist under that S3 prefix, and that the role "arn:aws:iam::637423309379:role/AmazonSageMakerExecutionRole" has
+"s3:ListBucket" permissions on bucket "btholath-sagemaker-datawrangler-demo".
+@btholath ➜ /workspaces/aws-ml-engineering-lifecycle/03_model_training (main) $ 

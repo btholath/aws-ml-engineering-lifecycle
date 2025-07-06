@@ -1,43 +1,51 @@
-"""
-02_split_validation_data.py to split raw data into training and validation sets.'
-
-Loads: 01_data/raw/sample_realistic_loan_approval_dataset.csv
-
-Splits into:
-01_data/processed/sample_realistic_loan_approval_dataset_train.csv
-01_data/validation/sample_realistic_loan_approval_dataset_valid.csv
-Uses train_test_split from scikit-learn
-"""
 import os
-import logging
 import pandas as pd
 from sklearn.model_selection import train_test_split
+from dotenv import load_dotenv
+import boto3
+import logging
 
 # Setup logging
-logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
-# Define input/output paths
-raw_data_path = "/workspaces/aws-ml-engineering-lifecycle/01_data/raw/sample_realistic_loan_approval_dataset.csv"
-train_output_path = "/workspaces/aws-ml-engineering-lifecycle/01_data/processed/sample_realistic_loan_approval_dataset_train.csv"
-valid_output_path = "/workspaces/aws-ml-engineering-lifecycle/01_data/validation/sample_realistic_loan_approval_dataset_ready_validation.csv"
+# Load .env variables
+load_dotenv()
+s3_bucket = os.getenv("S3_BUCKET")
 
-# Create output folders if not exist
-os.makedirs(os.path.dirname(train_output_path), exist_ok=True)
-os.makedirs(os.path.dirname(valid_output_path), exist_ok=True)
+# File paths
+input_file = "01_data/processed/sample_realistic_loan_approval_dataset_ready.csv"
+train_file = "01_data/processed/sample_realistic_loan_approval_dataset_train.csv"
+valid_file_local = "01_data/validation/sample_realistic_loan_approval_dataset_valid.csv"
+valid_file_expected = "01_data/validation/sample_realistic_loan_approval_dataset_ready.csv"
 
-try:
-    # Load the raw dataset
-    df = pd.read_csv(raw_data_path)
+# S3 key
+s3_key = "data/validation/sample_realistic_loan_approval_dataset_ready.csv"
 
-    # Split into train and validation
+def main():
+    if not os.path.exists(input_file):
+        raise FileNotFoundError(f"Input file not found: {input_file}")
+
+    df = pd.read_csv(input_file)
     train_df, valid_df = train_test_split(df, test_size=0.2, random_state=42)
 
-    # Save the splits
-    train_df.to_csv(train_output_path, index=False)
-    valid_df.to_csv(valid_output_path, index=False)
+    os.makedirs(os.path.dirname(train_file), exist_ok=True)
+    os.makedirs(os.path.dirname(valid_file_local), exist_ok=True)
 
-    logging.info(f"✅ Training data saved to: {train_output_path}")
-    logging.info(f"✅ Validation data saved to: {valid_output_path}")
+    # Save train and validation files locally
+    train_df.to_csv(train_file, index=False)
+    valid_df.to_csv(valid_file_local, index=False)
+    valid_df.to_csv(valid_file_expected, index=False)
 
-except Exception as e:
-    logging.error(f"❌ Failed to split dataset: {e}")
+    logger.info(f"✅ Saved training set to {train_file}")
+    logger.info(f"✅ Saved validation set to {valid_file_local} and {valid_file_expected}")
+
+    if s3_bucket:
+        s3 = boto3.client("s3")
+        s3.upload_file(valid_file_expected, s3_bucket, s3_key)
+        logger.info(f"📤 Uploaded validation set to s3://{s3_bucket}/{s3_key}")
+    else:
+        logger.warning("⚠️ No S3_BUCKET found in .env. Skipping upload.")
+
+if __name__ == "__main__":
+    main()
