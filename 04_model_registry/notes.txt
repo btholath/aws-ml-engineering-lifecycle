@@ -2,6 +2,12 @@
 02_approve_model.py: Approving a model version.
 03_deploy_from_registry.py: Deploying an approved model from the SageMaker Model Registry.
 
+.env
+BEST_TRAINING_JOB_NAME=your-best-job-name
+MODEL_PACKAGE_GROUP=LoanApprovalModelGroup
+SAGEMAKER_ROLE_ARN=arn:aws:iam::your-account-id:role/AmazonSageMakerExecutionRole
+AWS_REGION=us-east-1
+
 
 HPO = Hyperparameter Optimization (HPO)
 The python 03_model_training/hpo/02_visualize_hpo_results.py
