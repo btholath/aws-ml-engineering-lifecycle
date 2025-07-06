@@ -464,3 +464,227 @@ Register model to SageMaker Model Registry (optional):
 python 04_model_registry/01_register_model.py
 Deploy to a real-time endpoint or run a batch transform job.
 
+-----------------------------------------
+@btholath ➜ /workspaces/aws-ml-engineering-lifecycle (main) $ ./build_ml_environment.sh 
+🛠️ Creating SageMaker execution role...
+🚀 Creating SageMaker execution role: AmazonSageMakerExecutionRole...
+
+An error occurred (EntityAlreadyExists) when calling the CreateRole operation: Role with name AmazonSageMakerExecutionRole already exists.
+🔐 Attaching AmazonSageMakerFullAccess...
+✅ .env file updated with: arn:aws:iam::637423309379:role/AmazonSageMakerExecutionRole
+🌐 Creating SageMaker security group...
+ℹ️ Security group already exists: sagemaker-studio-sg (sg-0d1b3e5aecc6b9e44)
+🌐 Outbound rule already exists for sg-0d1b3e5aecc6b9e44
+🔐 SECURITY_GROUP_ID=sg-0d1b3e5aecc6b9e44
+🪣 Creating S3 bucket...
+🚀 Creating bucket btholath-sagemaker-datawrangler-demo in region us-east-1...
+{
+    "BucketRegion": "us-east-1",
+    "AccessPointAlias": false
+}
+⚠️  Bucket already exists: btholath-sagemaker-datawrangler-demo
+🧠 Launching SageMaker Studio domain...
+⚠️  SageMaker domain already exists: sagemaker-studio-domain
+🔐 Attaching IAM policies...
+ℹ️ Attaching AmazonSageMakerFullAccess to role: AmazonSageMakerExecutionRole
+✅ Role updated: arn:aws:iam::637423309379:role/AmazonSageMakerExecutionRole
+✅ Validating IAM role permissions...
+🔍 Validating role: AmazonSageMakerExecutionRole
+----------------------------------------
+1️⃣ Checking IAM role exists...
+✅ IAM role exists: AmazonSageMakerExecutionRole
+----------------------------------------
+2️⃣ Simulating IAM permissions (ListBuckets, CreateTrainingJob)...
+-----------------------------------------------------------------------
+|                       SimulatePrincipalPolicy                       |
++---------------------------------------------------------------------+
+||                         EvaluationResults                         ||
+|+---------------------+-------------------+-------------------------+|
+||   EvalActionName    |   EvalDecision    |    EvalResourceName     ||
+|+---------------------+-------------------+-------------------------+|
+||  s3:ListBucket      |  allowed          |  *                      ||
+|+---------------------+-------------------+-------------------------+|
+|||                        MatchedStatements                        |||
+||+--------------------------------------+--------------------------+||
+|||            SourcePolicyId            |    SourcePolicyType      |||
+||+--------------------------------------+--------------------------+||
+|||  AmazonSageMakerFullAccess           |  IAM Policy              |||
+||+--------------------------------------+--------------------------+||
+||||                          EndPosition                          ||||
+|||+----------------------------------+----------------------------+|||
+||||              Column              |           Line             ||||
+|||+----------------------------------+----------------------------+|||
+||||  4                               |  448                       ||||
+|||+----------------------------------+----------------------------+|||
+||||                         StartPosition                         ||||
+|||+----------------------------------+----------------------------+|||
+||||              Column              |           Line             ||||
+|||+----------------------------------+----------------------------+|||
+||||  4                               |  435                       ||||
+|||+----------------------------------+----------------------------+|||
+||                         EvaluationResults                         ||
+|+------------------------------+---------------+--------------------+|
+||        EvalActionName        | EvalDecision  | EvalResourceName   ||
+|+------------------------------+---------------+--------------------+|
+||  sagemaker:CreateTrainingJob |  allowed      |  *                 ||
+|+------------------------------+---------------+--------------------+|
+|||                        MatchedStatements                        |||
+||+--------------------------------------+--------------------------+||
+|||            SourcePolicyId            |    SourcePolicyType      |||
+||+--------------------------------------+--------------------------+||
+|||  AmazonSageMakerFullAccess           |  IAM Policy              |||
+||+--------------------------------------+--------------------------+||
+||||                          EndPosition                          ||||
+|||+----------------------------------+----------------------------+|||
+||||              Column              |           Line             ||||
+|||+----------------------------------+----------------------------+|||
+||||  4                               |  21                        ||||
+|||+----------------------------------+----------------------------+|||
+||||                         StartPosition                         ||||
+|||+----------------------------------+----------------------------+|||
+||||              Column              |           Line             ||||
+|||+----------------------------------+----------------------------+|||
+||||  16                              |  3                         ||||
+|||+----------------------------------+----------------------------+|||
+||                         EvaluationResults                         ||
+|+--------------------------+-----------------+----------------------+|
+||      EvalActionName      |  EvalDecision   |  EvalResourceName    ||
+|+--------------------------+-----------------+----------------------+|
+||  logs:CreateLogStream    |  allowed        |  *                   ||
+|+--------------------------+-----------------+----------------------+|
+|||                        MatchedStatements                        |||
+||+--------------------------------------+--------------------------+||
+|||            SourcePolicyId            |    SourcePolicyType      |||
+||+--------------------------------------+--------------------------+||
+|||  AmazonSageMakerFullAccess           |  IAM Policy              |||
+||+--------------------------------------+--------------------------+||
+||||                          EndPosition                          ||||
+|||+----------------------------------+----------------------------+|||
+||||              Column              |           Line             ||||
+|||+----------------------------------+----------------------------+|||
+||||  4                               |  284                       ||||
+|||+----------------------------------+----------------------------+|||
+||||                         StartPosition                         ||||
+|||+----------------------------------+----------------------------+|||
+||||              Column              |           Line             ||||
+|||+----------------------------------+----------------------------+|||
+||||  4                               |  177                       ||||
+|||+----------------------------------+----------------------------+|||
+||                         EvaluationResults                         ||
+|+-----------------------+------------------+------------------------+|
+||    EvalActionName     |  EvalDecision    |   EvalResourceName     ||
+|+-----------------------+------------------+------------------------+|
+||  logs:PutLogEvents    |  allowed         |  *                     ||
+|+-----------------------+------------------+------------------------+|
+|||                        MatchedStatements                        |||
+||+--------------------------------------+--------------------------+||
+|||            SourcePolicyId            |    SourcePolicyType      |||
+||+--------------------------------------+--------------------------+||
+|||  AmazonSageMakerFullAccess           |  IAM Policy              |||
+||+--------------------------------------+--------------------------+||
+||||                          EndPosition                          ||||
+|||+----------------------------------+----------------------------+|||
+||||              Column              |           Line             ||||
+|||+----------------------------------+----------------------------+|||
+||||  4                               |  284                       ||||
+|||+----------------------------------+----------------------------+|||
+||||                         StartPosition                         ||||
+|||+----------------------------------+----------------------------+|||
+||||              Column              |           Line             ||||
+|||+----------------------------------+----------------------------+|||
+||||  4                               |  177                       ||||
+|||+----------------------------------+----------------------------+|||
+----------------------------------------
+3️⃣ Verifying inline or attached policies...
+--------------------------------------------------------------------------------------
+|                              ListAttachedRolePolicies                              |
++------------------------------------------------------------------------------------+
+||                                 AttachedPolicies                                 ||
+|+----------------------------------------------------+-----------------------------+|
+||                      PolicyArn                     |         PolicyName          ||
+|+----------------------------------------------------+-----------------------------+|
+||  arn:aws:iam::aws:policy/AmazonSageMakerFullAccess |  AmazonSageMakerFullAccess  ||
+|+----------------------------------------------------+-----------------------------+|
+----------------------------------------
+✅ Role validation completed.
+If any permissions are missing, attach AmazonSageMakerFullAccess:
+aws iam attach-role-policy --role-name AmazonSageMakerExecutionRole --policy-arn arn:aws:iam::aws:policy/AmazonSageMakerFullAccess
+✅ All AWS resources created successfully.
+python: can't open file '/workspaces/aws-ml-engineering-lifecycle/01_data/scripts/01_generate_data.py': [Errno 2] No such file or directory
+2025-07-06 01:12:40,961 [INFO] ✅ Training data saved to: /workspaces/aws-ml-engineering-lifecycle/01_data/processed/sample_realistic_loan_approval_dataset_train.csv
+2025-07-06 01:12:40,961 [INFO] ✅ Validation data saved to: /workspaces/aws-ml-engineering-lifecycle/01_data/validation/sample_realistic_loan_approval_dataset_ready_validation.csv
+2025-07-06 01:12:41,971 [ERROR] ❌ Transformation failed: [Errno 2] No such file or directory: '01_data/processed/sample_realistic_loan_approval_dataset_train.csv'
+🚀 Running all data transformation steps...
+🔹 Step 1: Cleaning raw data...
+2025-07-06 01:12:42,947 [INFO] 📥 Loaded raw dataset: /workspaces/aws-ml-engineering-lifecycle/01_data/raw/sample_realistic_loan_approval_dataset.csv
+2025-07-06 01:12:42,951 [INFO] ✅ Imputed missing 'Age' with median
+2025-07-06 01:12:42,952 [INFO] 🧹 Dropped rows with missing LoanApproved: 0 rows removed
+2025-07-06 01:12:42,968 [INFO] ✅ Cleaned dataset saved: 01_data/processed/sample_realistic_loan_approval_dataset_cleaned.csv
+🔹 Step 2: Encoding categorical features...
+2025-07-06 01:12:43,829 [INFO] 📥 Loaded cleaned dataset: 01_data/processed/sample_realistic_loan_approval_dataset_cleaned.csv
+2025-07-06 01:12:43,835 [INFO] ✅ One-hot encoded columns: ['Gender', 'EducationLevel']
+2025-07-06 01:12:43,861 [INFO] 📤 Encoded dataset saved: 01_data/processed/sample_realistic_loan_approval_dataset_encoded.csv
+🔹 Step 3: Fixing booleans and uploading to S3...
+2025-07-06 01:12:44,399 [INFO] 📥 Loaded encoded dataset: 01_data/processed/sample_realistic_loan_approval_dataset_encoded.csv
+2025-07-06 01:12:44,403 [INFO] ✅ Converted 'LoanApproved' → 'label' [1/0]
+2025-07-06 01:12:44,427 [INFO] 📤 Final dataset saved: 01_data/processed/sample_realistic_loan_approval_dataset_ready.csv
+2025-07-06 01:12:44,439 [INFO] Found credentials in shared credentials file: ~/.aws/credentials
+2025-07-06 01:12:45,058 [INFO] ✅ Uploaded to S3: s3://btholath-sagemaker-datawrangler-demo/data/sample_realistic_loan_approval_dataset_ready.csv
+🔹 Step 4: Validating final dataset...
+2025-07-06 01:12:45,507 [INFO] 📄 Dataset loaded for validation.
+2025-07-06 01:12:45,508 [INFO] ✅ No missing values found.
+2025-07-06 01:12:45,508 [WARNING] ⚠️ Non-numeric columns found: ['CustomerID']
+2025-07-06 01:12:45,508 [INFO] ✅ Target column 'label' is binary and valid.
+🔹 Step 5: Generating statistics and histograms...
+2025-07-06 01:12:46,198 [INFO] 📥 Loaded dataset for EDA: 01_data/processed/sample_realistic_loan_approval_dataset_ready.csv
+2025-07-06 01:12:46,199 [INFO] 🧹 Dropped identifier column: CustomerID
+2025-07-06 01:12:46,212 [INFO] 📊 Summary statistics saved to: 01_data/eda/summary_statistics.csv
+2025-07-06 01:12:46,558 [INFO] 📈 Saved histogram with annotations: 01_data/eda/Age_histogram.png
+2025-07-06 01:12:46,952 [INFO] 📈 Saved histogram with annotations: 01_data/eda/Income_histogram.png
+2025-07-06 01:12:47,242 [INFO] 📈 Saved histogram with annotations: 01_data/eda/Gender_Male_histogram.png
+2025-07-06 01:12:47,684 [INFO] 📈 Saved histogram with annotations: 01_data/eda/Gender_Unspecified_histogram.png
+2025-07-06 01:12:47,924 [INFO] 📈 Saved histogram with annotations: 01_data/eda/EducationLevel_Bachelors_Degree_histogram.png
+2025-07-06 01:12:48,179 [INFO] 📈 Saved histogram with annotations: 01_data/eda/EducationLevel_High_School_histogram.png
+2025-07-06 01:12:48,404 [INFO] 📈 Saved histogram with annotations: 01_data/eda/EducationLevel_Masters_Degree_histogram.png
+2025-07-06 01:12:48,701 [INFO] 📈 Saved histogram with annotations: 01_data/eda/EducationLevel_PhD_histogram.png
+2025-07-06 01:12:48,948 [INFO] 📈 Saved histogram with annotations: 01_data/eda/label_histogram.png
+✅ All data transformation steps completed successfully!
+🧠 Running Feature Store setup...
+🔹 Step 1: Creating Feature Group...
+sagemaker.config INFO - Not applying SDK defaults from location: /etc/xdg/sagemaker/config.yaml
+sagemaker.config INFO - Not applying SDK defaults from location: /home/codespace/.config/sagemaker/config.yaml
+2025-07-06 01:12:50,807 [INFO] Found credentials in shared credentials file: ~/.aws/credentials
+2025-07-06 01:12:50,896 [INFO] Found credentials in shared credentials file: ~/.aws/credentials
+2025-07-06 01:12:51,042 [INFO] 📥 Loaded dataset: /workspaces/aws-ml-engineering-lifecycle/02_data_preparation/transform/01_data/processed/sample_realistic_loan_approval_dataset_ready.csv
+2025-07-06 01:12:51,489 [INFO] ⚠️ Feature Group 'loan-approval-feature-group' already exists. Skipping creation.
+⏳ Waiting 30 seconds for Feature Group to initialize...
+🔹 Step 2: Ingesting data into Feature Group...
+sagemaker.config INFO - Not applying SDK defaults from location: /etc/xdg/sagemaker/config.yaml
+sagemaker.config INFO - Not applying SDK defaults from location: /home/codespace/.config/sagemaker/config.yaml
+2025-07-06 01:13:23,705 [INFO] Found credentials in shared credentials file: ~/.aws/credentials
+2025-07-06 01:13:23,840 [INFO] 📤 Ingesting 5000 records to Feature Store...
+2025-07-06 01:13:24,423 [INFO] Found credentials in shared credentials file: ~/.aws/credentials
+2025-07-06 01:13:24,424 [INFO] Found credentials in shared credentials file: ~/.aws/credentials
+2025-07-06 01:13:24,463 [INFO] Found credentials in shared credentials file: ~/.aws/credentials
+2025-07-06 01:13:24,640 [INFO] Started ingesting index 3334 to 5000
+2025-07-06 01:13:24,658 [INFO] Started ingesting index 0 to 1667
+2025-07-06 01:13:24,665 [INFO] Started ingesting index 1667 to 3334
+2025-07-06 01:15:09,835 [INFO] Successfully ingested row 0 to 1667
+2025-07-06 01:15:10,808 [INFO] Successfully ingested row 3334 to 5000
+2025-07-06 01:15:10,878 [INFO] Successfully ingested row 1667 to 3334
+2025-07-06 01:15:10,902 [INFO] ✅ Ingestion complete.
+✅ Feature Store setup and ingestion complete.
+@btholath ➜ /workspaces/aws-ml-engineering-lifecycle (main) $ cd 03_model_training/
+@btholath ➜ /workspaces/aws-ml-engineering-lifecycle/03_model_training (main) $ ./run_all_model_training_steps.sh 
+🚀 Starting model training pipeline...
+🧠 Step 1: Training XGBoost Model
+sagemaker.config INFO - Not applying SDK defaults from location: /etc/xdg/sagemaker/config.yaml
+sagemaker.config INFO - Not applying SDK defaults from location: /home/codespace/.config/sagemaker/config.yaml
+Using SageMaker Role ARN: arn:aws:iam::637423309379:role/AmazonSageMakerExecutionRole
+INFO:botocore.credentials:Found credentials in shared credentials file: ~/.aws/credentials
+INFO:sagemaker.image_uris:Ignoring unnecessary instance type: None.
+INFO:botocore.credentials:Found credentials in shared credentials file: ~/.aws/credentials
+INFO:sagemaker.telemetry.telemetry_logging:SageMaker Python SDK will collect telemetry to help us better understand our user's needs, diagnose issues, and deliver additional features.
+To opt out of telemetry, please disable via TelemetryOptOut parameter in SDK defaults config. For more information, refer to https://sagemaker.readthedocs.io/en/stable/overview.html#configuring-and-using-defaults-with-the-sagemaker-python-sdk.
+INFO:sagemaker:Creating training-job with name: sagemaker-xgboost-2025-07-06-01-16-08-685
+2025-07-06 01:16:11 Starting - Starting the training job..
