@@ -8,8 +8,12 @@ from sagemaker.inputs import TrainingInput
 from sagemaker.estimator import Estimator
 from dotenv import load_dotenv
 
-# Load environment variables
-load_dotenv()
+# ----------------------------
+# Load .env from project root
+# ----------------------------
+project_root = Path(__file__).resolve().parent.parent
+dotenv_path = project_root / ".env"
+load_dotenv(dotenv_path=dotenv_path, override=True)
 role = os.getenv("SAGEMAKER_ROLE_ARN")
 bucket = os.getenv("S3_BUCKET")
 region = os.getenv("AWS_REGION", "us-east-1")

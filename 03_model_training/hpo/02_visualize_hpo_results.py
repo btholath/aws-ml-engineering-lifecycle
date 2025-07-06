@@ -3,19 +3,30 @@ import boto3
 import pandas as pd
 import matplotlib.pyplot as plt
 from dotenv import load_dotenv
+from pathlib import Path
 
-# Load existing env vars
-load_dotenv(override=True)
+# ----------------------------
+# Load .env from project root
+# ----------------------------
+project_root = Path(__file__).resolve().parent.parent.parent  # go up to root
+env_path = project_root / ".env"
+load_dotenv(dotenv_path=env_path, override=True)
 
+# ----------------------------
 # Read tuning job name
+# ----------------------------
 tuning_job_name = os.getenv("HPO_TUNING_JOB_NAME")
 if not tuning_job_name:
-    raise ValueError("❌ HPO_TUNING_JOB_NAME is not set in the environment or .env file.")
+    raise ValueError("❌ HPO_TUNING_JOB_NAME is not set in the .env file.")
 
+# ----------------------------
 # Initialize SageMaker client
+# ----------------------------
 sm = boto3.client("sagemaker")
 
-# List training jobs for the HPO tuning job
+# ----------------------------
+# List training jobs for HPO job
+# ----------------------------
 response = sm.list_training_jobs_for_hyper_parameter_tuning_job(
     HyperParameterTuningJobName=tuning_job_name,
     MaxResults=10,
@@ -23,23 +34,25 @@ response = sm.list_training_jobs_for_hyper_parameter_tuning_job(
     SortOrder='Ascending'
 )
 
-# Extract results
-# Parse training job results
+# ----------------------------
+# Convert to DataFrame
+# ----------------------------
 training_jobs = response["TrainingJobSummaries"]
-
-# Convert to pandas DataFrame for easier visualization
-records = []
-for job in training_jobs:
-    records.append({
+records = [
+    {
         "TrainingJobName": job["TrainingJobName"],
         "ObjectiveValue": job.get("FinalHyperParameterTuningJobObjectiveMetric", {}).get("Value", None),
         "Status": job["TrainingJobStatus"]
-    })
+    }
+    for job in training_jobs
+]
 
 df = pd.DataFrame(records)
 print(df)
 
-# Visualize results (if objective value exists)
+# ----------------------------
+# Plot HPO results
+# ----------------------------
 if not df["ObjectiveValue"].isnull().all():
     plt.figure(figsize=(10, 6))
     plt.barh(df["TrainingJobName"], df["ObjectiveValue"], color="skyblue")
@@ -51,20 +64,23 @@ if not df["ObjectiveValue"].isnull().all():
 else:
     print("⚠️ No completed training jobs with objective values found.")
 
-# Select best (lowest objective value) completed job
+# ----------------------------
+# Get best job
+# ----------------------------
 best_job = df[df["Status"] == "Completed"].nsmallest(1, "ObjectiveValue")
-
 if best_job.empty:
     raise RuntimeError("❌ No successful training jobs found in HPO results.")
 
 best_job_name = best_job.iloc[0]["TrainingJobName"]
 print(f"\n✅ Best training job: {best_job_name}")
 
-# Update .env utility
-def update_env_variable(key: str, value: str, env_file=".env"):
+# ----------------------------
+# Update .env file at project root
+# ----------------------------
+def update_env_variable(key: str, value: str, env_file=env_path):
     lines = []
     found = False
-    if os.path.exists(env_file):
+    if env_file.exists():
         with open(env_file, "r") as f:
             lines = f.readlines()
 
@@ -79,9 +95,10 @@ def update_env_variable(key: str, value: str, env_file=".env"):
     with open(env_file, "w") as f:
         f.writelines(lines)
 
-# Update and reload .env
 update_env_variable("BEST_TRAINING_JOB_NAME", best_job_name)
-load_dotenv(override=True)
 
-# Confirm
+# ----------------------------
+# Reload to confirm
+# ----------------------------
+load_dotenv(dotenv_path=env_path, override=True)
 print(f"📌 Updated .env → BEST_TRAINING_JOB_NAME={best_job_name}")

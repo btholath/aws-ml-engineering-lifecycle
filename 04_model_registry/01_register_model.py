@@ -1,14 +1,17 @@
 import os
 import logging
 import boto3
+from pathlib import Path
 from dotenv import load_dotenv
-from sagemaker import Session, ModelPackage
+from sagemaker import Session
 from sagemaker.model import Model
 
 # ----------------------------
-# Load .env and get required vars
+# Load .env from project root
 # ----------------------------
-load_dotenv(override=True)
+project_root = Path(__file__).resolve().parent.parent
+dotenv_path = project_root / ".env"
+load_dotenv(dotenv_path=dotenv_path, override=True)
 
 best_training_job = os.getenv("BEST_TRAINING_JOB_NAME")
 model_package_group = os.getenv("MODEL_PACKAGE_GROUP")
