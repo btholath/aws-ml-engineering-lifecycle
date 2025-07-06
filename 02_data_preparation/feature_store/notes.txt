@@ -9,3 +9,16 @@ aws sagemaker list-feature-groups --region us-east-1
 aws sagemaker describe-feature-group --feature-group-name loan-approval-feature-group
 
 
+--------------------------------------------
+Here are the steps to use SageMaker Feature Store
+- Create a feature group
+    - define schema and attributes
+        - requires a unique identifier and a timestamp
+- Ingest data into a featured groups
+- Access the store to retrieve features for datasets.
+    - Use PutRecord API to insert data
+    - Batch ingestion with AWS Glue or Lambda
+    - Validate data integrity during ingestion to prevent corrupt records.
+    - Use automated retries for failed ingestio  attempts to ensure reliability.
+    
+
