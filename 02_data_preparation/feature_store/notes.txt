@@ -28,8 +28,14 @@ Here are the steps to use SageMaker Feature Store
 Storage
 Type       Description
 online     Designed for low-latency, real-time access to feature data.
-            Stored in a high-performance database managed by sagemaker.
-offline     Designed for batch processing, historical data anlaysis, and feature engineering.
-            Persistently stored in S3.
+           Stored in a high-performance database managed by sagemaker. (DynamoDB)
+           Real-time Inference
+
+offline    Designed for batch processing, historical data anlaysis, and feature engineering.
+           Persistently stored in S3.
+           Model training & batch inference
+
 Online and Offline  - Combination of both
+
+
 
