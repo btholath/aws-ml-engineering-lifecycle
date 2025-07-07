@@ -27,12 +27,12 @@ cd ..
 # 3. Transformation + EDA + Upload
 cd 02_data_preparation/transform
 ./run_all_transform_steps.sh
-cd ../../..
+cd ../..
 
 # 4. Feature Store
 cd 02_data_preparation/feature_store
 ./run_all_feature_store_steps.sh
-cd ../../..
+cd ../..
 
 # 5. Model Training + HPO + Evaluation
 cd 03_model_training

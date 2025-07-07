@@ -12,6 +12,25 @@ from sagemaker.feature_store.feature_group import FeatureGroup
 load_dotenv()
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 
+import time
+import boto3
+
+def wait_for_feature_group_active(name, timeout_secs=300, interval_secs=10):
+    client = boto3.client("sagemaker")
+    start = time.time()
+    while time.time() - start < timeout_secs:
+        status = client.describe_feature_group(FeatureGroupName=name)["FeatureGroupStatus"]
+        if status == "Created":
+            print(f"✅ Feature Group {name} is now ACTIVE.")
+            return
+        elif status == "CreateFailed":
+            raise RuntimeError(f"❌ Feature Group {name} failed to create.")
+        else:
+            print(f"⏳ Waiting for Feature Group {name} to become ACTIVE... (current: {status})")
+            time.sleep(interval_secs)
+    raise TimeoutError(f"❌ Timeout: Feature Group {name} did not become ACTIVE in {timeout_secs} seconds.")
+
+
 region = os.getenv("AWS_REGION")
 feature_group_name = os.getenv("FEATURE_GROUP_NAME")
 if not feature_group_name:
@@ -33,5 +52,6 @@ fg = FeatureGroup(name=feature_group_name, sagemaker_session=session)
 
 # Ingest records
 logging.info(f"📤 Ingesting {len(df)} records to Feature Store...")
+wait_for_feature_group_active("loan-approval-feature-group")
 fg.ingest(data_frame=df, max_workers=3, wait=True)
 logging.info("✅ Ingestion complete.")
