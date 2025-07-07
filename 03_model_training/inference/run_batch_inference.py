@@ -1,35 +1,50 @@
 import os
+import logging
+import boto3
 import pandas as pd
 from dotenv import load_dotenv
-import boto3
-import logging
 from pathlib import Path
+from sklearn.model_selection import train_test_split
 
-# ----------------------------
-# Setup Logging
-# ----------------------------
+# Setup logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# ----------------------------
 # Load .env from project root
-# ----------------------------
-project_root = Path(__file__).resolve().parents[2]
+project_root = Path(__file__).resolve().parent.parent.parent
 dotenv_path = project_root / ".env"
 load_dotenv(dotenv_path=dotenv_path, override=True)
 
-# ----------------------------
-# Load required config
-# ----------------------------
-validation_file = os.getenv("VALIDATION_FILE", "01_data/validation/sample_realistic_loan_approval_dataset_ready.csv")
+# Read environment variables
+input_file = os.getenv("XGB_READY_CSV", "01_data/processed/sample_realistic_loan_approval_dataset_ready.csv")
+validation_output = os.getenv("XGB_VALIDATION_DATA", "01_data/sample_realistic_loan_approval_dataset_valid.csv")
 endpoint_name = os.getenv("XGB_INFERENCE_ENDPOINT")
+s3_bucket = os.getenv("S3_BUCKET")
 
-# ----------------------------
-# Batch inference function
-# ----------------------------
-def predict_batch(df_features):
+# For saving .env updates
+def update_env_variable(key: str, value: str, env_file=".env"):
+    env_path = project_root / env_file
+    lines = []
+    if env_path.exists():
+        lines = env_path.read_text().splitlines()
+
+    updated = False
+    for i, line in enumerate(lines):
+        if line.startswith(f"{key}="):
+            lines[i] = f"{key}={value}"
+            updated = True
+            break
+    if not updated:
+        lines.append(f"{key}={value}")
+
+    env_path.write_text("\n".join(lines) + "\n")
+    logger.info(f"📌 Updated .env → {key}={value}")
+
+
+# Perform batch inference
+def predict_batch(df_features, endpoint_name: str):
     runtime = boto3.client("sagemaker-runtime")
-    
+
     def invoke_endpoint(row):
         payload = ",".join(str(x) for x in row)
         response = runtime.invoke_endpoint(
@@ -37,57 +52,45 @@ def predict_batch(df_features):
             ContentType="text/csv",
             Body=payload
         )
-        prediction = float(response["Body"].read().decode("utf-8"))
+        prediction = float(response['Body'].read().decode("utf-8"))
         return int(prediction >= 0.5)
-    
-    logger.info("🚀 Running batch inference...")
+
+    logger.info("🚀 Running batch inference on validation data...")
     return df_features.apply(invoke_endpoint, axis=1)
 
-# ----------------------------
-# Update .env utility
-# ----------------------------
-def update_env_variable(key: str, value: str):
-    lines = []
-    found = False
-    if os.path.exists(dotenv_path):
-        with open(dotenv_path, "r") as f:
-            lines = f.readlines()
 
-    for i, line in enumerate(lines):
-        if line.startswith(f"{key}="):
-            lines[i] = f"{key}={value}\n"
-            found = True
-            break
-    if not found:
-        lines.append(f"{key}={value}\n")
-
-    with open(dotenv_path, "w") as f:
-        f.writelines(lines)
-    logger.info(f"📌 Updated .env → {key}={value}")
-
-# ----------------------------
-# Main Logic
-# ----------------------------
 def main():
     if not endpoint_name:
-        endpoint_name = input("❓ Enter your deployed XGBoost endpoint name: ").strip()
-        update_env_variable("XGB_INFERENCE_ENDPOINT", endpoint_name)
+        raise ValueError("❌ XGB_INFERENCE_ENDPOINT is not set in .env")
 
-    if not os.path.exists(validation_file):
-        raise FileNotFoundError(f"❌ Validation file not found: {validation_file}")
+    if not os.path.exists(input_file):
+        raise FileNotFoundError(f"❌ Input dataset not found: {input_file}")
 
-    df = pd.read_csv(validation_file)
+    df = pd.read_csv(input_file)
+    train_df, valid_df = train_test_split(df, test_size=0.2, random_state=42)
 
-    # Drop rows missing label column
-    if "label" not in df.columns:
-        raise ValueError("❌ Dataset missing required 'label' column.")
+    # Save split files (optional)
+    os.makedirs(os.path.dirname(validation_output), exist_ok=True)
 
-    feature_cols = [col for col in df.columns if col not in ["CustomerID", "label"]]
+    # Select only feature columns
+    feature_cols = [c for c in valid_df.columns if c not in ["CustomerID", "label"]]
+    valid_df["predicted_label"] = predict_batch(valid_df[feature_cols], endpoint_name)
 
-    df["predicted_label"] = predict_batch(df[feature_cols])
+    # Save locally
+    valid_df.to_csv(validation_output, index=False)
+    logger.info(f"✅ Saved validation results with predictions: {validation_output}")
 
-    df.to_csv(validation_file, index=False)
-    logger.info(f"✅ Inference complete. Predictions saved to: {validation_file}")
+    # Upload to S3 if bucket is configured
+    if s3_bucket:
+        s3_key = "data/inference/sample_loan_predictions.csv"
+        try:
+            boto3.client("s3").upload_file(validation_output, s3_bucket, s3_key)
+            logger.info(f"📤 Uploaded to S3: s3://{s3_bucket}/{s3_key}")
+        except Exception as e:
+            logger.error(f"❌ Upload failed: {e}")
+
+    # Update .env (redundant if already set)
+    update_env_variable("XGB_VALIDATION_DATA", validation_output)
 
 if __name__ == "__main__":
     main()
