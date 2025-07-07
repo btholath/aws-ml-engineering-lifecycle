@@ -24,20 +24,28 @@ python hpo/02_visualize_hpo_results.py
 echo "📊 Step 5: Evaluating Classification Metrics"
 python metrics/01_evaluate_metrics.py
 
-# Step 6: Batch inference using deployed endpoint
-echo "🔮 Step 6: Running Batch Inference"
+# Step 6: Register model and deploy endpoint before inference
+echo "📦 Step 6: Registering model and deploying endpoint"
+cd ../04_model_registry
+python 01_register_model.py
+python 02_approve_model.py
+python 03_deploy_from_registry.py
+cd ../03_model_training
+
+# Step 7: Batch inference using deployed endpoint
+echo "🔮 Step 7: Running Batch Inference"
 python inference/run_batch_inference.py
 
-# Step 7: Generate Confusion Matrix
-echo "📉 Step 7: Generating Confusion Matrix"
+# Step 8: Generate Confusion Matrix
+echo "📉 Step 8: Generating Confusion Matrix"
 python metrics/02_confusion_matrix.py
 
-# Step 8: Generate ROC Curve
-echo "📈 Step 8: Generating ROC Curve"
+# Step 9: Generate ROC Curve
+echo "📈 Step 9: Generating ROC Curve"
 python metrics/03_roc_curve.py
 
-# Step 9: SHAP Explainability
-echo "🧠 Step 9: Generating SHAP Explainability Visuals"
+# Step 10: SHAP Explainability
+echo "🧠 Step 10: Generating SHAP Explainability Visuals"
 python metrics/04_shap_explainer.py
 
 echo "✅ Model training pipeline completed."

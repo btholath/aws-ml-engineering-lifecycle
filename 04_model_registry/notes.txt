@@ -1,3 +1,11 @@
+Steps to deploy a real-time endpoint
+1. Train and register a model in SageMaker
+2. Create a SageMaker endpoint configuration
+3. Deploy the endpoint using either SageMAker Studio or SDK
+4. Test the endpoint with real-time requests.
+5. Monitor and Optimize performance with SageMaker Model Monitor.
+
+
 01_register_model.py: Registering the best trained model from your HPO job
 02_approve_model.py: Approving a model version.
 03_deploy_from_registry.py: Deploying an approved model from the SageMaker Model Registry.

@@ -99,4 +99,15 @@ aws iam delete-role --role-name "$ROLE_NAME" && echo "✅ Deleted IAM role $ROLE
 # 9. Optional: delete SG/VPCs
 echo "🛡️  (Optional) Delete VPC/Security Group manually if custom created."
 
+# ----------------------------------------
+# 10. Teardown SageMaker Endpoint & Model Registry
+# ----------------------------------------
+echo "🧹 Tearing down model registry and deployed endpoint..."
+
+if [ -f "04_model_registry/teardown_registry_and_endpoint.py" ]; then
+    python 04_model_registry/teardown_registry_and_endpoint.py
+else
+    echo "⚠️ teardown_registry_and_endpoint.py not found!"
+fi
+
 echo "✅ ML environment teardown completed successfully."
