@@ -25,7 +25,7 @@ if [ "$DOMAIN_ID" != "None" ]; then
     aws sagemaker delete-user-profile --region "$REGION" --domain-id "$DOMAIN_ID" --user-profile-name "$PROFILE"
   done
   echo "❌ Deleting Studio domain: $DOMAIN_ID"
-  aws sagemaker delete-domain --region "$REGION" --domain-id "$DOMAIN_ID" --retain-deployment-type false
+  aws sagemaker delete-domain --region "$REGION" --domain-id "$DOMAIN_ID"
 else
   echo "✅ No Studio domain found."
 fi

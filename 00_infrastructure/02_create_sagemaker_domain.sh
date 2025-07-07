@@ -25,3 +25,21 @@ if [[ -z "$DOMAIN_EXISTS" ]]; then
 else
     echo "⚠️  SageMaker domain already exists: $DOMAIN_NAME"
 fi
+
+# Fetch Domain ID
+DOMAIN_ID=$(aws sagemaker list-domains --query "Domains[?DomainName=='$DOMAIN_NAME'].DomainId" --output text --region "$REGION")
+
+# Check if user profile exists
+USER_PROFILE_EXISTS=$(aws sagemaker list-user-profiles --domain-id-equals "$DOMAIN_ID" --query "UserProfiles[?UserProfileName=='$USER_PROFILE_NAME'] | length(@)" --output text --region "$REGION")
+
+if [[ "$USER_PROFILE_EXISTS" == "0" ]]; then
+    echo "👤 Creating user profile: $USER_PROFILE_NAME"
+    aws sagemaker create-user-profile \
+      --domain-id "$DOMAIN_ID" \
+      --user-profile-name "$USER_PROFILE_NAME" \
+      --user-settings "ExecutionRole=$ROLE_ARN" \
+      --region "$REGION"
+    echo "✅ User profile created: $USER_PROFILE_NAME"
+else
+    echo "ℹ️ User profile already exists: $USER_PROFILE_NAME"
+fi

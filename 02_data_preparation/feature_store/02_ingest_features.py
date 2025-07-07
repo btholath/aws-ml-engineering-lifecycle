@@ -15,20 +15,30 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(me
 import time
 import boto3
 
-def wait_for_feature_group_active(name, timeout_secs=300, interval_secs=10):
-    client = boto3.client("sagemaker")
-    start = time.time()
-    while time.time() - start < timeout_secs:
-        status = client.describe_feature_group(FeatureGroupName=name)["FeatureGroupStatus"]
-        if status == "Created":
-            print(f"✅ Feature Group {name} is now ACTIVE.")
+def wait_for_feature_group_ready(feature_group_name, region="us-east-1", timeout=300, interval=10):
+    sm_client = boto3.client("sagemaker", region_name=region)
+    elapsed = 0
+
+    print(f"⏳ Waiting for Feature Group '{feature_group_name}' to become ready...")
+
+    while elapsed < timeout:
+        response = sm_client.describe_feature_group(FeatureGroupName=feature_group_name)
+        status = response.get("FeatureGroupStatus")
+        offline_status = response.get("OfflineStoreStatus", {}).get("Status", "None")
+
+        print(f"🧐 Status check: FeatureGroupStatus={status}, OfflineStoreStatus={offline_status}")
+
+        if status == "Created" and (offline_status in ["Active", "None"]):
+            print(f"✅ Feature Group '{feature_group_name}' is now fully ready.")
             return
-        elif status == "CreateFailed":
-            raise RuntimeError(f"❌ Feature Group {name} failed to create.")
-        else:
-            print(f"⏳ Waiting for Feature Group {name} to become ACTIVE... (current: {status})")
-            time.sleep(interval_secs)
-    raise TimeoutError(f"❌ Timeout: Feature Group {name} did not become ACTIVE in {timeout_secs} seconds.")
+
+        if status == "Failed":
+            raise RuntimeError(f"❌ Feature Group creation failed.")
+
+        time.sleep(interval)
+        elapsed += interval
+
+    raise TimeoutError(f"⏱️ Timed out waiting for Feature Group '{feature_group_name}' to be ready.")
 
 
 region = os.getenv("AWS_REGION")
@@ -52,6 +62,6 @@ fg = FeatureGroup(name=feature_group_name, sagemaker_session=session)
 
 # Ingest records
 logging.info(f"📤 Ingesting {len(df)} records to Feature Store...")
-wait_for_feature_group_active("loan-approval-feature-group")
+wait_for_feature_group_ready("loan-approval-feature-group", region="us-east-1")
 fg.ingest(data_frame=df, max_workers=3, wait=True)
 logging.info("✅ Ingestion complete.")
