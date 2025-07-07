@@ -57,3 +57,13 @@ example, memory optimized, compute optimized, general purpose, inference optimiz
 -   Monitoring, auditing, and logging ML systems to ensure continued security and compliance
 -   Troubleshooting and debugging security issues
 -   Building VPCs, subnets, and security groups to securely isolate ML systems
+
+
+
+***build_ml_environment.sh - Follow the full end-to-end ML pipeline sequence:***
+-   Provision infrastructure.
+-   Prepare and clean data.
+-   Run transformation, feature store setup, and EDA.
+-   Train model and run HPO.
+-   Register and deploy model.
+-   Run batch inference and evaluate.
