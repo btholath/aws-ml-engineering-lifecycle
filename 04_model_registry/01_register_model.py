@@ -4,7 +4,6 @@ import boto3
 from pathlib import Path
 from dotenv import load_dotenv
 from sagemaker import Session
-from sagemaker.model import Model
 
 # ----------------------------
 # Load .env from project root
@@ -18,10 +17,20 @@ model_package_group = os.getenv("MODEL_PACKAGE_GROUP")
 role = os.getenv("SAGEMAKER_ROLE_ARN")
 region = os.getenv("AWS_REGION", "us-east-1")
 
+# Set default group if not provided
+if not model_package_group:
+    model_package_group = "LoanApprovalModelGroup"
+    logger = logging.getLogger(__name__)
+    logger.setLevel(logging.INFO)
+    handler = logging.StreamHandler()
+    logger.addHandler(handler)
+    logger.info(f"⚠️ MODEL_PACKAGE_GROUP not set. Using default: {model_package_group}")
+    # Patch .env
+    with open(dotenv_path, "a") as f:
+        f.write(f"\nMODEL_PACKAGE_GROUP={model_package_group}\n")
+
 if not best_training_job:
     raise ValueError("❌ BEST_TRAINING_JOB_NAME is not set in .env.")
-if not model_package_group:
-    raise ValueError("❌ MODEL_PACKAGE_GROUP is not set in .env.")
 if not role:
     raise ValueError("❌ SAGEMAKER_ROLE_ARN is not set in .env.")
 
@@ -36,6 +45,20 @@ logger = logging.getLogger(__name__)
 # ----------------------------
 sm_client = boto3.client("sagemaker", region_name=region)
 session = Session()
+
+# ----------------------------
+# Ensure Model Package Group exists
+# ----------------------------
+try:
+    sm_client.describe_model_package_group(ModelPackageGroupName=model_package_group)
+    logger.info(f"✅ Model Package Group '{model_package_group}' already exists.")
+except sm_client.exceptions.ResourceNotFound:
+    logger.info(f"📦 Model Package Group '{model_package_group}' not found. Creating it...")
+    sm_client.create_model_package_group(
+        ModelPackageGroupName=model_package_group,
+        ModelPackageGroupDescription="Auto-created for loan approval model registry pipeline."
+    )
+    logger.info(f"✅ Model Package Group '{model_package_group}' created.")
 
 # ----------------------------
 # Get model artifact S3 path from the training job
