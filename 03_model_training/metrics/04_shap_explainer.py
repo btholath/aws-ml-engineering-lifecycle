@@ -1,54 +1,44 @@
-"""
-SHAP explanation of XGBoost model.
-"""
-
 import os
-import logging
-import pandas as pd
 import shap
-import joblib
+import xgboost as xgb
+import pandas as pd
 import matplotlib.pyplot as plt
 from pathlib import Path
 from dotenv import load_dotenv
 
-# Setup logging
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+# Load .env
+load_dotenv(dotenv_path=Path(__file__).resolve().parents[2] / ".env", override=True)
 
-# Load project-level .env
-project_root = Path(__file__).resolve().parent.parent.parent
-dotenv_path = project_root / ".env"
-load_dotenv(dotenv_path=dotenv_path, override=True)
+# Paths
+validation_data_path = os.getenv("XGB_VALIDATION_DATA")
+model_path = "03_model_training/model/xgboost_model.json"
 
-# Load paths from .env
-model_path = os.getenv("XGB_MODEL_LOCAL", "model.joblib")
-data_path = os.getenv("XGB_VALIDATION_DATA", "01_data/sample_realistic_loan_approval_dataset_valid.csv")
-
-# Check if paths exist
+if not validation_data_path or not os.path.exists(validation_data_path):
+    raise FileNotFoundError(f"❌ Validation data not found: {validation_data_path}")
 if not os.path.exists(model_path):
     raise FileNotFoundError(f"❌ Model file not found: {model_path}")
-if not os.path.exists(data_path):
-    raise FileNotFoundError(f"❌ Validation dataset not found: {data_path}")
 
-# Load model and dataset
-model = joblib.load(model_path)
-df = pd.read_csv(data_path)
+# Load validation data and model
+df = pd.read_csv(validation_data_path)
+X = df.drop(columns=["CustomerID", "label", "predicted_label", "predicted_proba"], errors="ignore")
 
-# Validate expected columns
-if "label" not in df.columns or "predicted_label" not in df.columns:
-    raise ValueError("❌ Required columns 'label' and/or 'predicted_label' not found in dataset.")
+booster = xgb.Booster()
+booster.load_model(model_path)
 
-# Drop non-feature columns
-X = df.drop(columns=["CustomerID", "label", "predicted_label"], errors="ignore")
+# Create DMatrix
+dmatrix = xgb.DMatrix(X)
 
-logger.info("🧠 Explaining model predictions with SHAP...")
-explainer = shap.Explainer(model)
-shap_values = explainer(X)
+# SHAP
+explainer = shap.TreeExplainer(booster)
+shap_values = explainer.shap_values(X)
 
-# Save summary plot
+# Ensure output directory exists
+output_path = Path("03_model_training/metrics/shap_summary_plot.png")
+output_path.parent.mkdir(parents=True, exist_ok=True)
+
+# SHAP summary plot
+plt.figure()
 shap.summary_plot(shap_values, X, show=False)
-plt.title("SHAP Summary Plot")
 plt.tight_layout()
-output_file = "03_model_training/metrics/shap_summary.png"
-plt.savefig(output_file)
-logger.info(f"✅ SHAP summary plot saved to: {output_file}")
+plt.savefig(output_path)
+print(f"✅ SHAP summary plot saved: {output_path}")
