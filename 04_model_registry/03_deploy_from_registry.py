@@ -4,7 +4,9 @@ import boto3
 from dotenv import load_dotenv
 from pathlib import Path
 
-# Load environment
+# ----------------------------
+# Load environment variables
+# ----------------------------
 project_root = Path(__file__).resolve().parent.parent
 dotenv_path = project_root / ".env"
 load_dotenv(dotenv_path=dotenv_path, override=True)
@@ -17,14 +19,20 @@ model_package_group = os.getenv("MODEL_PACKAGE_GROUP")
 if not role or not model_package_group or not endpoint_name:
     raise ValueError("❌ One or more required variables are missing in .env")
 
-# Setup logging
+# ----------------------------
+# Logging setup
+# ----------------------------
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+# ----------------------------
 # Boto3 client
+# ----------------------------
 sm_client = boto3.client("sagemaker", region_name=region)
 
+# ----------------------------
 # Get latest approved model package
+# ----------------------------
 response = sm_client.list_model_packages(
     ModelPackageGroupName=model_package_group,
     SortBy="CreationTime",
@@ -39,35 +47,43 @@ if not response["ModelPackageSummaryList"]:
 model_package_arn = response["ModelPackageSummaryList"][0]["ModelPackageArn"]
 logger.info(f"✅ Using approved model package: {model_package_arn}")
 
-# Create model
+# ----------------------------
+# Create SageMaker Model
+# ----------------------------
 model_name = endpoint_name + "-model"
-sm_client.create_model(
-    ModelName=model_name,
-    ExecutionRoleArn=role,
-    Containers=[
-        {
-            "ModelPackageName": model_package_arn
-        }
-    ]
-)
-logger.info(f"🧠 Model created: {model_name}")
+try:
+    sm_client.describe_model(ModelName=model_name)
+    logger.info(f"♻️ Model already exists: {model_name}")
+except sm_client.exceptions.ClientError:
+    sm_client.create_model(
+        ModelName=model_name,
+        ExecutionRoleArn=role,
+        Containers=[{"ModelPackageName": model_package_arn}]
+    )
+    logger.info(f"🧠 Model created: {model_name}")
 
-# Create endpoint config
+# ----------------------------
+# Create Endpoint Config
+# ----------------------------
 config_name = endpoint_name + "-config"
-sm_client.create_endpoint_config(
-    EndpointConfigName=config_name,
-    ProductionVariants=[
-        {
+try:
+    sm_client.describe_endpoint_config(EndpointConfigName=config_name)
+    logger.info(f"♻️ Endpoint config already exists: {config_name}")
+except sm_client.exceptions.ClientError:
+    sm_client.create_endpoint_config(
+        EndpointConfigName=config_name,
+        ProductionVariants=[{
             "VariantName": "AllTraffic",
             "ModelName": model_name,
             "InitialInstanceCount": 1,
             "InstanceType": "ml.m5.large"
-        }
-    ]
-)
-logger.info(f"⚙️ Endpoint config created: {config_name}")
+        }]
+    )
+    logger.info(f"⚙️ Endpoint config created: {config_name}")
 
-# Deploy endpoint
+# ----------------------------
+# Deploy Endpoint
+# ----------------------------
 try:
     sm_client.describe_endpoint(EndpointName=endpoint_name)
     logger.info(f"♻️ Updating existing endpoint: {endpoint_name}")

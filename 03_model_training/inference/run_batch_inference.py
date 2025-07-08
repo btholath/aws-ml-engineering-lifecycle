@@ -4,6 +4,7 @@ import boto3
 import pandas as pd
 from dotenv import load_dotenv
 from pathlib import Path
+import time
 from sklearn.model_selection import train_test_split
 
 # Setup logging
@@ -58,6 +59,18 @@ def predict_batch(df_features, endpoint_name: str):
     logger.info("🚀 Running batch inference on validation data...")
     return df_features.apply(invoke_endpoint, axis=1)
 
+def wait_until_endpoint_in_service(endpoint_name, timeout=600):
+    sm = boto3.client("sagemaker", region_name=os.getenv("AWS_REGION", "us-east-1"))
+    start = time.time()
+    while time.time() - start < timeout:
+        status = sm.describe_endpoint(EndpointName=endpoint_name)["EndpointStatus"]
+        if status == "InService":
+            return True
+        elif status == "Failed":
+            raise RuntimeError(f"Endpoint {endpoint_name} creation failed.")
+        time.sleep(10)
+    raise TimeoutError(f"Timed out waiting for endpoint: {endpoint_name}")
+
 
 def main():
     if not endpoint_name:
@@ -93,4 +106,5 @@ def main():
     update_env_variable("XGB_VALIDATION_DATA", validation_output)
 
 if __name__ == "__main__":
+    wait_until_endpoint_in_service(endpoint_name)
     main()
