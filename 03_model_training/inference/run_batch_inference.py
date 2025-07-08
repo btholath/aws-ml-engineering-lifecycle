@@ -42,7 +42,7 @@ def update_env_variable(key: str, value: str, env_file=".env"):
     env_path.write_text("\n".join(lines) + "\n")
     logger.info(f"📌 Updated .env → {key}={value}")
 
-# Endpoint status check
+# Wait until endpoint is ready
 def wait_until_endpoint_in_service(endpoint_name, timeout=600):
     sm = boto3.client("sagemaker", region_name=region)
     start = time.time()
@@ -55,7 +55,7 @@ def wait_until_endpoint_in_service(endpoint_name, timeout=600):
         time.sleep(10)
     raise TimeoutError(f"Timed out waiting for endpoint: {endpoint_name}")
 
-# Perform batch prediction using invoke_endpoint
+# Predict function with proba and label
 def predict_batch(df_features, endpoint_name):
     runtime = boto3.client("sagemaker-runtime", region_name=region)
 
@@ -66,8 +66,8 @@ def predict_batch(df_features, endpoint_name):
             ContentType="text/csv",
             Body=payload
         )
-        result = response["Body"].read().decode("utf-8")
-        proba = float(result.strip())
+        result = response["Body"].read().decode("utf-8").strip()
+        proba = float(result)
         label = int(proba >= 0.5)
         return pd.Series({"predicted_proba": proba, "predicted_label": label})
 
@@ -84,7 +84,6 @@ def main():
     df = pd.read_csv(input_file)
     train_df, valid_df = train_test_split(df, test_size=0.2, random_state=42)
 
-    # Prepare directories
     os.makedirs(os.path.dirname(validation_output), exist_ok=True)
 
     feature_cols = [c for c in valid_df.columns if c not in ["CustomerID", "label"]]
@@ -93,11 +92,9 @@ def main():
     valid_df["predicted_proba"] = predictions["predicted_proba"]
     valid_df["predicted_label"] = predictions["predicted_label"]
 
-    # Save locally
     valid_df.to_csv(validation_output, index=False)
     logger.info(f"✅ Saved validation results with predictions: {validation_output}")
 
-    # Upload to S3 if configured
     if s3_bucket:
         s3_key = "data/inference/sample_loan_predictions.csv"
         try:
@@ -106,7 +103,6 @@ def main():
         except Exception as e:
             logger.error(f"❌ Upload to S3 failed: {e}")
 
-    # Update .env for downstream scripts
     update_env_variable("XGB_VALIDATION_DATA", validation_output)
 
 if __name__ == "__main__":
