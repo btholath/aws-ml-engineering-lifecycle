@@ -47,7 +47,7 @@ if aws s3 ls s3://$s3_bucket/$artifact_path >/dev/null 2>&1; then
     echo "✅ Valid model artifact found for HPO best job: $best_hpo_job"
 else
     echo "⚠️  HPO model artifact not found. Falling back to base training job..." | tee -a "$train_log"
-    base_job=$(grep '📦 Training Job:' "$log_dir"/train-*.log | awk '{print $NF}' | grep -v "$best_hpo_job" | tail -1 || true)
+    base_job=$(grep '📦 Training Job:' "$log_dir"/train-*.log | grep -v "$best_hpo_job" | awk '{print $NF}' | tail -1 || true)
     if [[ -z "$base_job" ]]; then
         echo "❌ No fallback base training job found in logs. Exiting." | tee -a "$train_log"
         exit 1
@@ -63,6 +63,12 @@ fi
 new_artifact="s3://$s3_bucket/output/$best_hpo_job/output/model.tar.gz"
 sed -i.bak "/^MODEL_ARTIFACT=/d" ../.env
 echo "MODEL_ARTIFACT=$new_artifact" >> ../.env
+
+# Ensure MODEL_PACKAGE_GROUP is present in .env
+if ! grep -q "^MODEL_PACKAGE_GROUP=" ../.env; then
+  echo "MODEL_PACKAGE_GROUP=LoanApprovalModelGroup" >> ../.env
+  echo "📌 Updated .env → MODEL_PACKAGE_GROUP=LoanApprovalModelGroup" | tee -a "$train_log"
+fi
 
 # Step 6: Evaluate classification metrics
 echo "📊 Step 6: Evaluating Classification Metrics" | tee -a "$train_log"
