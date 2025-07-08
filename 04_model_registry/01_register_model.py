@@ -13,21 +13,9 @@ dotenv_path = project_root / ".env"
 load_dotenv(dotenv_path=dotenv_path, override=True)
 
 best_training_job = os.getenv("BEST_TRAINING_JOB_NAME")
-model_package_group = os.getenv("MODEL_PACKAGE_GROUP")
+model_package_group = os.getenv("MODEL_PACKAGE_GROUP", "LoanApprovalModelGroup")
 role = os.getenv("SAGEMAKER_ROLE_ARN")
 region = os.getenv("AWS_REGION", "us-east-1")
-
-# Set default group if not provided
-if not model_package_group:
-    model_package_group = "LoanApprovalModelGroup"
-    logger = logging.getLogger(__name__)
-    logger.setLevel(logging.INFO)
-    handler = logging.StreamHandler()
-    logger.addHandler(handler)
-    logger.info(f"⚠️ MODEL_PACKAGE_GROUP not set. Using default: {model_package_group}")
-    # Patch .env
-    with open(dotenv_path, "a") as f:
-        f.write(f"\nMODEL_PACKAGE_GROUP={model_package_group}\n")
 
 if not best_training_job:
     raise ValueError("❌ BEST_TRAINING_JOB_NAME is not set in .env.")
@@ -47,25 +35,27 @@ sm_client = boto3.client("sagemaker", region_name=region)
 session = Session()
 
 # ----------------------------
-# Ensure Model Package Group exists
-# ----------------------------
-try:
-    sm_client.describe_model_package_group(ModelPackageGroupName=model_package_group)
-    logger.info(f"✅ Model Package Group '{model_package_group}' already exists.")
-except sm_client.exceptions.ResourceNotFound:
-    logger.info(f"📦 Model Package Group '{model_package_group}' not found. Creating it...")
-    sm_client.create_model_package_group(
-        ModelPackageGroupName=model_package_group,
-        ModelPackageGroupDescription="Auto-created for loan approval model registry pipeline."
-    )
-    logger.info(f"✅ Model Package Group '{model_package_group}' created.")
-
-# ----------------------------
 # Get model artifact S3 path from the training job
 # ----------------------------
 training_job_info = sm_client.describe_training_job(TrainingJobName=best_training_job)
 model_artifact = training_job_info["ModelArtifacts"]["S3ModelArtifacts"]
 logger.info(f"📦 Model artifact found at: {model_artifact}")
+
+# ----------------------------
+# Ensure Model Package Group exists or create it
+# ----------------------------
+try:
+    sm_client.describe_model_package_group(ModelPackageGroupName=model_package_group)
+    logger.info(f"✅ Model Package Group '{model_package_group}' already exists.")
+except sm_client.exceptions.ClientError as e:
+    if "ModelPackageGroup does not exist" in str(e):
+        logger.info(f"📦 Model Package Group '{model_package_group}' not found. Creating it.")
+        sm_client.create_model_package_group(
+            ModelPackageGroupName=model_package_group,
+            ModelPackageGroupDescription="Group for XGBoost loan approval models"
+        )
+    else:
+        raise
 
 # ----------------------------
 # Register model
