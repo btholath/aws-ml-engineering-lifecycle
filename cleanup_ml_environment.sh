@@ -47,20 +47,30 @@ for MODEL in $MODELS; do
 done
 
 # 4. Delete model packages
-echo "🧼 Deleting model packages..."
-MODEL_PACKAGES=$(aws sagemaker list-model-packages --region "$REGION" --query "ModelPackageSummaryList[].ModelPackageArn" --output text)
-for MP in $MODEL_PACKAGES; do
-  echo "❌ Deleting model package: $MP"
-  aws sagemaker delete-model-package --region "$REGION" --model-package-name "$MP"
+echo "🧼 Deleting model package groups..."
+package_groups=$(aws sagemaker list-model-package-groups --region "$REGION" --query "ModelPackageGroupSummaryList[].ModelPackageGroupName" --output text)
+
+for group in $package_groups; do
+    echo "🧼 Checking group: $group"
+
+    # List all model packages in this group
+    packages=$(aws sagemaker list-model-packages \
+        --model-package-group-name "$group" \
+        --region "$REGION" \
+        --query "ModelPackageSummaryList[].ModelPackageArn" \
+        --output text)
+
+    # Delete each model package
+    for pkg_arn in $packages; do
+        echo "🔸 Deleting model package: $pkg_arn"
+        aws sagemaker delete-model-package --model-package-name "$pkg_arn" --region "$REGION"
+    done
+
+    # Now delete the group
+    echo "🧨 Deleting model package group: $group"
+    aws sagemaker delete-model-package-group --model-package-group-name "$group" --region "$REGION"
 done
 
-# 5. Delete model package groups
-echo "🧼 Deleting model package groups..."
-PACKAGE_GROUPS=$(aws sagemaker list-model-package-groups --region "$REGION" --query "ModelPackageGroupSummaryList[].ModelPackageGroupName" --output text)
-for PG in $PACKAGE_GROUPS; do
-  echo "❌ Deleting model package group: $PG"
-  aws sagemaker delete-model-package-group --region "$REGION" --model-package-group-name "$PG"
-done
 
 # 6. Delete Feature Store groups
 echo "🧼 Deleting SageMaker Feature Groups..."

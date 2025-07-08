@@ -5,6 +5,13 @@ set -o pipefail
 # --------------------------------------
 # Full ML Pipeline Build Script
 # --------------------------------------
+echo "🧪 Validating environment..."
+echo "REGION=$AWS_REGION"
+echo "SAGEMAKER_ROLE_ARN=$SAGEMAKER_ROLE_ARN"
+echo "MODEL_PACKAGE_GROUP=$MODEL_PACKAGE_GROUP"
+echo "S3_BUCKET=$S3_BUCKET"
+echo "BEST_TRAINING_JOB_NAME=$BEST_TRAINING_JOB_NAME"
+echo "MODEL_ARTIFACT=$MODEL_ARTIFACT"
 
 REGION=$(aws configure get region)
 ACCOUNT_ID=$(aws sts get-caller-identity --query "Account" --output text)
