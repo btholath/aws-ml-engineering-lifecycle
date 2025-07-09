@@ -14,3 +14,15 @@
    ├── 02_fetch_results.py                  # Fetches and saves results
 
 </pre>
+
+Testing Individual Steps (optional)
+```bash
+python model_packaging/01_create_model_artifact.py
+python real_time/01_deploy_endpoint.py
+python batch/01_batch_transform.py
+```
+
+Teardown (cleanup real-time endpoint)
+```bash
+python real_time/04_teardown_endpoint.py
+```
