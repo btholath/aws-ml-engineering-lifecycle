@@ -1,4 +1,5 @@
 import os
+import time
 import logging
 import boto3
 from dotenv import load_dotenv
@@ -26,7 +27,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # ----------------------------
-# Boto3 client
+# SageMaker client
 # ----------------------------
 sm_client = boto3.client("sagemaker", region_name=region)
 
@@ -65,13 +66,13 @@ except sm_client.exceptions.ClientError:
 # ----------------------------
 # Create Endpoint Config
 # ----------------------------
-config_name = endpoint_name + "-config"
+endpoint_config_name = endpoint_name + "-config"
 try:
-    sm_client.describe_endpoint_config(EndpointConfigName=config_name)
-    logger.info(f"♻️ Endpoint config already exists: {config_name}")
+    sm_client.describe_endpoint_config(EndpointConfigName=endpoint_config_name)
+    logger.info(f"♻️ Endpoint config already exists: {endpoint_config_name}")
 except sm_client.exceptions.ClientError:
     sm_client.create_endpoint_config(
-        EndpointConfigName=config_name,
+        EndpointConfigName=endpoint_config_name,
         ProductionVariants=[{
             "VariantName": "AllTraffic",
             "ModelName": model_name,
@@ -79,23 +80,51 @@ except sm_client.exceptions.ClientError:
             "InstanceType": "ml.m5.large"
         }]
     )
-    logger.info(f"⚙️ Endpoint config created: {config_name}")
+    logger.info(f"⚙️ Endpoint config created: {endpoint_config_name}")
 
 # ----------------------------
-# Deploy Endpoint
+# Deploy or update Endpoint
 # ----------------------------
+import botocore
+
 try:
-    sm_client.describe_endpoint(EndpointName=endpoint_name)
-    logger.info(f"♻️ Updating existing endpoint: {endpoint_name}")
-    sm_client.update_endpoint(
-        EndpointName=endpoint_name,
-        EndpointConfigName=config_name
-    )
-except sm_client.exceptions.ClientError:
-    logger.info(f"🚀 Creating new endpoint: {endpoint_name}")
-    sm_client.create_endpoint(
-        EndpointName=endpoint_name,
-        EndpointConfigName=config_name
-    )
+    existing_endpoint = sm_client.describe_endpoint(EndpointName=endpoint_name)
+    existing_config_name = existing_endpoint["EndpointConfigName"]
+
+    if existing_config_name == endpoint_config_name:
+        # Cannot update with the same config name, create a new one
+        new_config_name = f"{endpoint_config_name}-{int(time.time())}"
+        sm_client.create_endpoint_config(
+            EndpointConfigName=new_config_name,
+            ProductionVariants=[{
+                "VariantName": "AllTraffic",
+                "ModelName": model_name,
+                "InitialInstanceCount": 1,
+                "InstanceType": "ml.m5.large"
+            }]
+        )
+        logger.warning(f"♻️ Created new endpoint config: {new_config_name}")
+        sm_client.update_endpoint(
+            EndpointName=endpoint_name,
+            EndpointConfigName=new_config_name
+        )
+        logger.info(f"✅ Endpoint updated with new config: {new_config_name}")
+    else:
+        sm_client.update_endpoint(
+            EndpointName=endpoint_name,
+            EndpointConfigName=endpoint_config_name
+        )
+        logger.info(f"✅ Endpoint updated with config: {endpoint_config_name}")
+
+except botocore.exceptions.ClientError as error:
+    error_code = error.response["Error"]["Code"]
+    if error_code == "ValidationException" and "Could not find endpoint" in str(error):
+        sm_client.create_endpoint(
+            EndpointName=endpoint_name,
+            EndpointConfigName=endpoint_config_name
+        )
+        logger.info(f"🚀 Created new endpoint: {endpoint_name}")
+    else:
+        raise
 
 logger.info(f"✅ Model deployed to endpoint: {endpoint_name}")

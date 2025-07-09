@@ -108,6 +108,6 @@ echo "📊 Step 6: Generating evaluation reports..."
 python 03_model_training/metrics/01_evaluate_metrics.py
 python 03_model_training/metrics/02_confusion_matrix.py
 python 03_model_training/metrics/03_roc_curve.py
-python 03_model_training/metrics/04_shap_explainer.py
+#python 03_model_training/metrics/04_shap_explainer.py
 
 echo "✅ Full ML pipeline executed successfully!"

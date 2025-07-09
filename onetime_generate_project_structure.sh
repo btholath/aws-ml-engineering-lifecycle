@@ -59,7 +59,7 @@ create_module 03_model_training/metrics
 create_file 03_model_training/metrics/01_evaluate_metrics.py
 create_file 03_model_training/metrics/02_confusion_matrix.py
 create_file 03_model_training/metrics/03_roc_curve.py
-create_file 03_model_training/metrics/04_shap_explainer.py
+#create_file 03_model_training/metrics/04_shap_explainer.py
 
 # --- 04_model_registry ---
 create_module 04_model_registry
