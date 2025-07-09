@@ -91,8 +91,8 @@ python metrics/02_confusion_matrix.py 2>&1 | tee -a "$train_log"
 echo "📈 Step 10: Generating ROC Curve" | tee -a "$train_log"
 python metrics/03_roc_curve.py 2>&1 | tee -a "$train_log"
 
-# Step 11: SHAP Explainability
-echo "🧠 Step 11: Generating SHAP Explainability Visuals" | tee -a "$train_log"
-python metrics/04_shap_explainer.py 2>&1 | tee -a "$train_log"
+## Step 11: SHAP Explainability
+#echo "🧠 Step 11: Generating SHAP Explainability Visuals" | tee -a "$train_log"
+#python metrics/04_shap_explainer.py 2>&1 | tee -a "$train_log"
 
 echo "✅ Model training pipeline completed." | tee -a "$train_log"
